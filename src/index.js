@@ -3,11 +3,20 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { BrowserRouter } from 'react-router-dom';
+import Sidebar from './component/sidebar';
+import { ThemeProvider } from 'react-bootstrap';
+import './fonts/IRANSansWeb.ttf';
+import Navbars from './component/navbar';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider dir="rtl">
+      <BrowserRouter>
+        <Navbars />
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>
 );
 
