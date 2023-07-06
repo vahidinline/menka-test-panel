@@ -1,13 +1,45 @@
-//create a reusable input component
-//this component will be used in the login and register component
-
 import React from 'react';
 
-const MenkaInput = ({ name, label, error, ...rest }) => {
+const MenkaInput = ({ type, name, label, error, ...rest }) => {
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
-      <input {...rest} name={name} id={name} className="form-control" />
+      {type === 'text' && (
+        <input
+          {...rest}
+          type={type}
+          name={name}
+          id={name}
+          className="form-control"
+        />
+      )}
+      {type === 'file' && (
+        <input
+          {...rest}
+          type={type}
+          name={name}
+          id={name}
+          className="form-control-file"
+        />
+      )}
+      {type === 'radio' && (
+        <input
+          {...rest}
+          type={type}
+          name={name}
+          id={name}
+          className="form-check-input"
+        />
+      )}
+      {type === 'checkbox' && (
+        <input
+          {...rest}
+          type={type}
+          name={name}
+          id={name}
+          className="form-check-input"
+        />
+      )}
       {error && <div className="alert alert-danger">{error}</div>}
     </div>
   );
