@@ -8,9 +8,9 @@ function Navbars() {
         <Navbar.Brand href="#home">پنل منکا</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text>
+          {/* <Navbar.Text>
             نام والد: <a href="#login"> شکرالله نعمت زاده </a>
-          </Navbar.Text>
+          </Navbar.Text> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

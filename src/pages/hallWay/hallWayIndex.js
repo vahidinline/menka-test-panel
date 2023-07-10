@@ -8,7 +8,8 @@ import Door from '../../assets/door.json';
 import { FaLock } from 'react-icons/fa';
 
 const HallWayIndex = () => {
-  const { questions } = useContext(QuestionsContext);
+  //get item form local dtorage
+  const questions = JSON.parse(localStorage.getItem('questions'));
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [roomTypes, setRoomTypes] = useState([]);
 
@@ -29,7 +30,7 @@ const HallWayIndex = () => {
 
     setFilteredQuestions(filteredQuestionsByRoom);
     setRoomTypes(uniqueRoomTypes);
-  }, [questions]);
+  }, []);
 
   const defaultOptions = {
     loop: false,
@@ -41,47 +42,37 @@ const HallWayIndex = () => {
   };
 
   return (
-    <>
-      {/* map all roomType and navigate to them */}
-      {roomTypes?.map((room, index) => (
-        <Container>
-          <Col
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Card style={{ margin: '30px' }}>
-              <Card.Body>
-                <Card.Title> {room}</Card.Title>
-                <Card.Text>
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '400px',
-                      height: '400px',
-                      opacity: 0.5,
-                    }}>
-                    <FaLock className="lock-icon" />
-                    <Lottie options={defaultOptions} height={400} width={400} />
-                  </div>
-                </Card.Text>
-              </Card.Body>
-              <Card.Footer>
-                <Link
-                  state={{
-                    room: room,
-                    questions: filteredQuestions[index],
-                  }}
-                  to={`/hallway/room/${room}}`}>
-                  Enter
-                </Link>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Container>
-      ))}
-    </>
+    <Container>
+      <Col>
+        {/* map all roomType and navigate to them */}
+        {roomTypes?.map((room, index) => (
+          <Card style={{ margin: '30px' }}>
+            <Card.Body>
+              <div
+                style={{
+                  position: 'relative',
+                  width: '400px',
+                  height: '400px',
+                  opacity: 0.5,
+                }}>
+                <FaLock className="lock-icon" />
+                <Lottie options={defaultOptions} height={400} width={400} />
+              </div>
+            </Card.Body>
+            <Card.Footer>
+              <Link
+                state={{
+                  room: room,
+                  questions: filteredQuestions[index],
+                }}
+                to={`/hallway/room/${room}}`}>
+                Enter
+              </Link>
+            </Card.Footer>
+          </Card>
+        ))}
+      </Col>
+    </Container>
   );
 };
 

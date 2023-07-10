@@ -18,6 +18,7 @@ function Home() {
       );
       const data = await response.json();
       setQuestions(data);
+      localStorage.setItem('questions', JSON.stringify(data));
       if (data && data.length > 0) {
         setTimeout(() => {
           navigate('/hallway');
@@ -43,9 +44,8 @@ function Home() {
           overflow: 'hidden',
           marginLeft: 0,
         }}>
-        <MenkaInput type={'radio'} />
         <Col>
-          <Card style={{ margin: '30px' }}>
+          {/* <Card style={{ margin: '30px' }}>
             <Card.Body>
               <Card.Title> به منکا خوش امدید</Card.Title>
               <Card.Text>
@@ -69,11 +69,9 @@ function Home() {
               </Button>
               <ProgressBar striped variant="success" />
             </Card.Body>
-          </Card>
+          </Card> */}
         </Col>
-        <Col>
-          <CarouselHome />
-        </Col>
+        <Col>{/* <CarouselHome /> */}</Col>
       </Row>
     </Container>
   );

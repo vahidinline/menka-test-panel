@@ -41,8 +41,7 @@ function LoginFormPhone() {
           <Form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('submit');
-              signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+              window.location.href = '/home';
             }}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>لطفا شماره موبایل خود را وارد کنید</Form.Label>

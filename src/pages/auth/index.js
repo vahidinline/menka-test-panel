@@ -7,35 +7,11 @@ const AuthIndex = () => {
   const [loginType, setLoginType] = useState('email');
   return (
     <Container className="font-face-gm">
+      <Row></Row>
       <Row>
-        <Col className="text-center">
-          <ButtonGroup size="lg" className="mb-2">
-            <Button>ثبت نام</Button>
-            <Button
-              onClick={() => {
-                setLoginType('email');
-              }}>
-              ورود با ایمیل
-            </Button>
-            <Button
-              onClick={() => {
-                setLoginType('phone');
-              }}>
-              ورود با شماره تلفن
-            </Button>
-          </ButtonGroup>
+        <Col>
+          <LoginFormPhone />
         </Col>
-      </Row>
-      <Row>
-        {loginType === 'email' ? (
-          <Col>
-            <LoginFormEmail />
-          </Col>
-        ) : (
-          <Col>
-            <LoginFormPhone />
-          </Col>
-        )}
       </Row>
     </Container>
   );

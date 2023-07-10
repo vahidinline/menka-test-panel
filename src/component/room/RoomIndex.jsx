@@ -4,22 +4,104 @@
 //should has video and text to describe the room.
 //if user answered all the questions, the room will be closed
 //room must be locked based on the parent condition
-
+import { useEffect, useState } from 'react';
 import Question from '../question';
 import { useLocation } from 'react-router-dom';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import MenkaInput from '../form/input';
+import { Container, Form } from 'react-bootstrap';
+import RoomNameFrame from './frame';
+
+const lable = [
+  { id: 1, lable: 'بله' },
+  { id: 2, lable: 'خیر' },
+  { id: 3, lable: 'گاهی' },
+];
+
 const RoomIndex = (props) => {
   const location = useLocation();
   const { questions, room } = location.state;
+  const [currentStep, setCurrentStep] = useState(0);
+  const [answers, setAnswers] = useState(); // Form data state
+  const [savedData, setSavedData] = useState(null); // Saved form data state
 
-  console.log(location);
+  // Load saved data from storage on component mount
+  useEffect(() => {
+    const savedFormData = JSON.parse(localStorage.getItem(`${room}-answers`));
+    const savedTimestamp = localStorage.getItem('timestamp');
+    const threeDays = 3 * 24 * 60 * 60 * 1000; // Three days in milliseconds
+
+    if (
+      savedFormData &&
+      savedTimestamp &&
+      Date.now() - savedTimestamp < threeDays
+    ) {
+      setSavedData(savedFormData);
+    }
+  }, []);
+
+  // Update form data
+  const handleChange = (event) => {
+    console.log(event.target.value);
+    setAnswers(event.target.value);
+  };
+
+  const handleNextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
 
   return (
-    <div className="font-face-gm">
-      <h1>اتاق {room}</h1>
+    <div
+      style={{
+        backgroundImage: `url("https://www.transparenttextures.com/patterns/brick-wall.png")`,
+      }}
+      className=" mt-5 mx-auto text-center
+    font-face-gm">
+      <RoomNameFrame roomName={room} />
+      {questions.length > 0 && (
+        <>
+          <Question question={questions[currentStep]} />
+          {lable.map((item, index) => {
+            return (
+              <Container className="d-flex mt-4">
+                <Form.Group required onChange={handleChange} className="mb-3">
+                  <Form.Check
+                    type="radio"
+                    name="answer"
+                    label={item.lable}
+                    value={item.id}
+                  />
+                </Form.Group>
+              </Container>
+            );
+          })}
+        </>
+      )}
 
-      {questions.map((question) => (
-        <Question question={question} />
-      ))}
+      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        <button
+          className="btn btn-primary"
+          disabled={currentStep === 0}
+          onClick={() => setCurrentStep((prevStep) => prevStep - 1)}>
+          قبلی
+        </button>
+
+        {currentStep < questions.length - 1 ? (
+          <button className="btn btn-primary" onClick={handleNextStep}>
+            بعدی
+          </button>
+        ) : (
+          <button className="btn btn-primary" disabled>
+            ثبت
+          </button>
+        )}
+      </div>
+
+      <ProgressBar
+        className="mx-4 my-5"
+        animated
+        now={(currentStep / questions.length) * 100}
+      />
     </div>
   );
 };
