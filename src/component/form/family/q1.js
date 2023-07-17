@@ -3,36 +3,47 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ChildInformationFormOne } from '../../../data/questions.js';
 import PersianDatePicker from '../../persianDatePicker.js';
+import MRangeSlider from '../rangeSlider.js';
+const Q1 = (props) => {
+  const { setQ1 } = props;
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [q1Answers, setQ1Answers] = useState({});
+  const [completed, setCompleted] = useState(false);
 
-const Q1 = () => {
-  const [formData, setFormData] = useState({});
-
-  const [showQuestion5, setShowQuestion5] = useState(false);
+  const currentQuestion = ChildInformationFormOne[currentQuestionIndex];
 
   const handleChange = (e, index) => {
-    const updatedFormData = { ...formData };
+    const updatedFormData = { ...q1Answers };
     updatedFormData[index] = e.target.value;
-    setFormData(updatedFormData);
-
-    if (index === 8 && parseInt(e.target.value) > 1) {
-      setShowQuestion5(true);
-    } else if (index === 8) {
-      setShowQuestion5(false);
-      // Clear the answer to question 5 when it is hidden
-      setFormData({ ...formData, 9: '' });
-    }
+    setQ1Answers(updatedFormData);
   };
 
   const handleDateChange = (date, index) => {
-    const updatedFormData = { ...formData };
+    const updatedFormData = { ...q1Answers };
     updatedFormData[index] = date;
-    setFormData(updatedFormData);
+    setQ1Answers(updatedFormData);
+  };
+
+  const handleNext = () => {
+    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
   };
 
   const handleSubmit = (e) => {
+    setQ1(true);
+    console.log('set Q1 to true');
     e.preventDefault();
     // Perform form submission or further processing here
-    console.log('Form submitted:', formData);
+    console.log('Form submitted:', q1Answers);
+  };
+
+  const checkCompletion = () => {
+    const isCompleted =
+      Object.keys(q1Answers).length === ChildInformationFormOne.length;
+    setCompleted(isCompleted);
   };
 
   return (
@@ -41,64 +52,77 @@ const Q1 = () => {
         className="justify-content-md-center font-face-gm"
         style={{ marginTop: '2rem' }}>
         <Col xs lg="6">
-          <Form onSubmit={handleSubmit}>
-            <h3>بررسی بستر خانواده و محیط کودک</h3>
-            {ChildInformationFormOne.map((question, index) => (
-              <Form.Group key={index} controlId={`question${index + 1}`}>
-                <Form.Label>{question.question}</Form.Label>
-                {question.type === 'text' && (
-                  <Form.Control
-                    type="text"
-                    value={formData[index] || ''}
-                    onChange={(e) => handleChange(e, index)}
+          <h3>بررسی بستر خانواده و محیط کودک</h3>
+          <Form.Group controlId={`question${currentQuestionIndex + 1}`}>
+            <Form.Label>{currentQuestion.question}</Form.Label>
+            {currentQuestion.type === 'text' && (
+              <Form.Control
+                type="text"
+                value={q1Answers[currentQuestionIndex] || ''}
+                onChange={(e) => handleChange(e, currentQuestionIndex)}
+              />
+            )}
+            {currentQuestion.type === 'date' && (
+              <PersianDatePicker
+                value={q1Answers[currentQuestionIndex]}
+                onChange={(date) =>
+                  handleDateChange(date, currentQuestionIndex)
+                }
+              />
+            )}
+            {currentQuestion.type === 'number' && (
+              <MRangeSlider min={0} max={10} step={1} />
+            )}
+            {currentQuestion.type === 'radio' && (
+              <div>
+                {currentQuestion.options.map((option, optionIndex) => (
+                  <Form.Check
+                    key={optionIndex}
+                    type="radio"
+                    id={`question${currentQuestionIndex + 1}-option${
+                      optionIndex + 1
+                    }`}
+                    label={option}
+                    value={option}
+                    checked={q1Answers[currentQuestionIndex] === option}
+                    onChange={(e) => handleChange(e, currentQuestionIndex)}
                   />
-                )}
-                {question.type === 'date' && <PersianDatePicker />}
-                {question.type === 'radio' && (
-                  <div>
-                    {question.options.map((option, optionIndex) => (
-                      <Form.Check
-                        key={optionIndex}
-                        type="radio"
-                        id={`question${index + 1}-option${optionIndex + 1}`}
-                        label={option}
-                        value={option}
-                        checked={formData[index] === option}
-                        onChange={(e) => handleChange(e, index)}
-                      />
-                    ))}
-                  </div>
-                )}
-                {showQuestion5 && (
-                  <Form.Group controlId="question9">
-                    <Form.Label>
-                      فاصله ی سنی فرزندان از یک دیگر چقدر است؟
-                    </Form.Label>
-                    {formData[8] > 1 &&
-                      Array.from({ length: formData[8] - 1 }).map((_, i) => (
-                        <Form.Control
-                          key={i}
-                          type="text"
-                          value={formData[9 + i] || ''}
-                          onChange={(e) => handleChange(e, 9 + i)}
-                        />
-                      ))}
-                  </Form.Group>
-                )}
-              </Form.Group>
-            ))}
-            <Link
-              to={{
-                pathname: '/home',
-              }}
-              state={2}
+                ))}
+              </div>
+            )}
+          </Form.Group>
+          <div className="d-flex justify-content-between">
+            <Button
+              onClick={handlePrevious}
               style={{ textDecoration: 'none' }}
               className="btn btn-primary mt-3 mb-3"
               size="lg"
-              type="submit">
-              ثبت فرم و ادامه
-            </Link>
-          </Form>
+              disabled={currentQuestionIndex === 0}>
+              قبلی
+            </Button>
+            {currentQuestionIndex < ChildInformationFormOne.length - 1 ? (
+              <Button
+                onClick={handleNext}
+                style={{ textDecoration: 'none' }}
+                className="btn btn-primary mt-3 mb-3"
+                size="lg"
+                //disabled={!q1Answers[currentQuestionIndex]}>
+              >
+                {' '}
+                بعدی
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSubmit}
+                style={{ textDecoration: 'none' }}
+                className="btn btn-primary mt-3 mb-3"
+                size="lg"
+                //disabled={!q1Answers[currentQuestionIndex]}
+              >
+                ثبت فرم و ادامه
+              </Button>
+            )}
+          </div>
         </Col>
       </Row>
     </Container>

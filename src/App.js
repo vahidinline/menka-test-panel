@@ -16,8 +16,8 @@ function App() {
     <QuestionsContext.Provider value={{ questions, setQuestions }}>
       <Routes>
         <Route>
-          <Route path="/home" element={<Home />} />
-          <Route path="/" element={<AuthIndex />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<AuthIndex />} />
           <Route path="/form" element={<ChildInformationForm />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/hallway" element={<HallWayIndex />} />

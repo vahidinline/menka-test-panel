@@ -55,11 +55,21 @@ const RoomIndex = (props) => {
       style={{
         backgroundImage: `url("https://www.transparenttextures.com/patterns/brick-wall.png")`,
       }}
-      className=" mt-5 mx-auto text-center
-    font-face-gm">
-      <RoomNameFrame roomName={room} />
+      className='mt-5
+      font-face-gm
+      mx-auto
+      text-justify
+      w-50
+      bg-white
+      p-5
+      rounded-3
+      shadow-lg
+      border border-2 border-secondary
+      
+      '>
+      {/* <RoomNameFrame roomName={room} /> */}
       {questions.length > 0 && (
-        <>
+        <div >
           <Question question={questions[currentStep]} />
           {lable.map((item, index) => {
             return (
@@ -69,13 +79,13 @@ const RoomIndex = (props) => {
                     type="radio"
                     name="answer"
                     label={item.lable}
-                    value={item.id}
+                    
                   />
                 </Form.Group>
               </Container>
             );
           })}
-        </>
+        </div>
       )}
 
       <div style={{ display: 'flex', justifyContent: 'space-around' }}>

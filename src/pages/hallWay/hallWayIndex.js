@@ -12,7 +12,7 @@ const HallWayIndex = () => {
   const questions = JSON.parse(localStorage.getItem('questions'));
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [roomTypes, setRoomTypes] = useState([]);
-
+console.log(roomTypes)
   useEffect(() => {
     const filterQuestionsByRoom = (roomName) => {
       return questions.filter((question) => question.roomType === roomName);
@@ -43,32 +43,42 @@ const HallWayIndex = () => {
 
   return (
     <Container>
-      <Col>
+      <Col
+      className='font-face-gm '
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          
+        }}
+      >
         {/* map all roomType and navigate to them */}
         {roomTypes?.map((room, index) => (
-          <Card style={{ margin: '30px' }}>
+          <Card style={{ margin: '20px' }}>
             <Card.Body>
+            <Card.Title>
+               اتاق سوالات  {room}  <FaLock className="lock-icon" />
+              </Card.Title>
               <div
                 style={{
                   position: 'relative',
-                  width: '400px',
-                  height: '400px',
-                  opacity: 0.5,
+                  // width: '400px',
+                  // height: '400px',
+                  opacity: 1,
                 }}>
-                <FaLock className="lock-icon" />
-                <Lottie options={defaultOptions} height={400} width={400} />
-              </div>
-            </Card.Body>
-            <Card.Footer>
-              <Link
+               
+                <Link
                 state={{
                   room: room,
                   questions: filteredQuestions[index],
                 }}
                 to={`/hallway/room/${room}}`}>
-                Enter
-              </Link>
-            </Card.Footer>
+                <Lottie options={defaultOptions} height={400} width={400} /> </Link>
+              </div>
+          
+            </Card.Body>
+        
           </Card>
         ))}
       </Col>

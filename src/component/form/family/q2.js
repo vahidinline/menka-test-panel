@@ -3,38 +3,33 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ChildInformationFormTwo } from '../../../data/questions.js';
-import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
-import RangeSlider from 'react-bootstrap-range-slider';
-
-const Q2 = () => {
-  const [formData, setFormData] = useState({});
-
-  const [showQuestion5, setShowQuestion5] = useState(false);
+import MRangeSlider from '../rangeSlider.js';
+const Q2 = (props) => {
+  const { setQ2 } = props;
+  const [q2Answers, setQ2Answers] = useState({});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [completed, setCompleted] = useState(false);
+  const currentQuestion = ChildInformationFormTwo[currentQuestionIndex];
 
   const handleChange = (e, index) => {
-    const updatedFormData = { ...formData };
+    const updatedFormData = { ...q2Answers };
     updatedFormData[index] = e.target.value;
-    setFormData(updatedFormData);
-
-    if (index === 8 && parseInt(e.target.value) > 1) {
-      setShowQuestion5(true);
-    } else if (index === 8) {
-      setShowQuestion5(false);
-      // Clear the answer to question 5 when it is hidden
-      setFormData({ ...formData, 9: '' });
-    }
+    setQ2Answers(updatedFormData);
   };
 
-  const handleDateChange = (date, index) => {
-    const updatedFormData = { ...formData };
-    updatedFormData[index] = date;
-    setFormData(updatedFormData);
+  const handleNext = () => {
+    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
   };
 
   const handleSubmit = (e) => {
+    setQ2(true);
     e.preventDefault();
     // Perform form submission or further processing here
-    console.log('Form submitted:', formData);
+    console.log('Form submitted:', q2Answers);
   };
 
   return (
@@ -43,69 +38,69 @@ const Q2 = () => {
         className="justify-content-md-center font-face-gm"
         style={{ marginTop: '2rem' }}>
         <Col xs lg="6">
-          <Form onSubmit={handleSubmit}>
-            <h3>کیفیت و کمیت رابطه ی والد با کودک</h3>
-            {ChildInformationFormTwo.map((question, index) => (
-              <Form.Group key={index} controlId={`question${index + 1}`}>
-                <Form.Label>{question.question}</Form.Label>
-                {question.type === 'text' && (
-                  <Form.Control
-                    type="text"
-                    value={formData[index] || ''}
-                    onChange={(e) => handleChange(e, index)}
+          <h3>کیفیت و کمیت رابطه ی والد با کودک</h3>
+
+          <Form.Group controlId={`question${currentQuestionIndex + 1}`}>
+            <Form.Label>{currentQuestion.question}</Form.Label>
+            {currentQuestion.type === 'text' && (
+              <Form.Control
+                type="text"
+                value={q2Answers[currentQuestionIndex] || ''}
+                onChange={(e) => handleChange(e, currentQuestionIndex)}
+              />
+            )}
+
+            {currentQuestion.type === 'radio' && (
+              <div>
+                {currentQuestion.options.map((option, optionIndex) => (
+                  <Form.Check
+                    key={optionIndex}
+                    type="radio"
+                    id={`question${currentQuestionIndex + 1}-option${
+                      optionIndex + 1
+                    }`}
+                    label={option}
+                    value={option}
+                    checked={q2Answers[currentQuestionIndex] === option}
+                    onChange={(e) => handleChange(e, currentQuestionIndex)}
                   />
-                )}
-                {question.type === 'number ' && (
-                  <RangeSlider
-                    value="100"
-                    // onChange={changeEvent => setValue(changeEvent.target.value)}
-                  />
-                )}
-                {question.type === 'radio' && (
-                  <div>
-                    {question.options.map((option, optionIndex) => (
-                      <Form.Check
-                        key={optionIndex}
-                        type="radio"
-                        id={`question${index + 1}-option${optionIndex + 1}`}
-                        label={option}
-                        value={option}
-                        checked={formData[index] === option}
-                        onChange={(e) => handleChange(e, index)}
-                      />
-                    ))}
-                  </div>
-                )}
-                {/* {showQuestion5 && (
-                  <Form.Group controlId="question9">
-                    <Form.Label>
-                      فاصله ی سنی فرزندان از یک دیگر چقدر است؟
-                    </Form.Label>
-                    {formData[8] > 1 &&
-                      Array.from({ length: formData[8] - 1 }).map((_, i) => (
-                        <Form.Control
-                          key={i}
-                          type="text"
-                          value={formData[9 + i] || ''}
-                          onChange={(e) => handleChange(e, 9 + i)}
-                        />
-                      ))}
-                  </Form.Group>
-                )} */}
-              </Form.Group>
-            ))}
-            <Link
-              to={{
-                pathname: '/home',
-              }}
-              state={2}
+                ))}
+              </div>
+            )}
+          </Form.Group>
+          <div className="d-flex justify-content-between">
+            <Button
+              onClick={handlePrevious}
               style={{ textDecoration: 'none' }}
               className="btn btn-primary mt-3 mb-3"
               size="lg"
-              type="submit">
-              ثبت فرم و ادامه
-            </Link>
-          </Form>
+              disabled={currentQuestionIndex === 0}>
+              قبلی
+            </Button>
+            {currentQuestionIndex < ChildInformationFormTwo.length - 1 ? (
+              <Button
+                onClick={handleNext}
+                style={{ textDecoration: 'none' }}
+                className="btn btn-primary mt-3 mb-3"
+                size="lg"
+                //disabled={!q1Answers[currentQuestionIndex]}>
+              >
+                {' '}
+                بعدی
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSubmit}
+                style={{ textDecoration: 'none' }}
+                className="btn btn-primary mt-3 mb-3"
+                size="lg"
+                //disabled={!q2Answers[currentQuestionIndex]}>
+              >
+                {' '}
+                ثبت فرم و ادامه
+              </Button>
+            )}
+          </div>
         </Col>
       </Row>
     </Container>

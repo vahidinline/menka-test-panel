@@ -1,75 +1,190 @@
-const ChildInformationFormOne = [
+const ChildInformationFormZero = [
   {
+    id: 1,
     question: 'نام کودک',
     type: 'text',
   },
   {
+    id: 2,
     question: 'نام خانوادگی کودک',
     type: 'text',
   },
   {
-    question: 'روز/ماه/سال تولد کودک',
+    id: 3,
+    question: ' تاریخ تولد کودک',
     type: 'date',
   },
   {
+    id: 4,
     question: 'تاریخ تولد مادر',
     type: 'date',
   },
   {
+    id: 5,
     question: 'تحصیلات مادر',
+    type: 'select',
+    items: [
+      'بی سواد',
+      'ابتدایی',
+      'راهنمایی',
+      'دیپلم',
+      'کاردانی',
+      'کارشناسی',
+      'کارشناسی ارشد',
+      'دکتری',
+    ],
+  },
+  {
+    id: 6,
+    question: 'آیا کودک مراقبینی غیر از پدر و مادر دارد ؟',
+    type: 'radio',
+    options: ['بله', 'خیر'],
+    condition: [
+      'پرستار',
+      'مادربزرگ',
+      ' افراد دیگر',
+      'کودک بیش از یک مراقب دارد ',
+    ],
+  },
+
+  {
+    id: 7,
+    question:
+      '	آیا مراقبان ، هم راستا با روشهای تربیتی و قانون گذاری شما هستند ؟ ',
+    type: 'range',
+    options: {
+      100: 'کاملا موافق',
+      75: 'موافق',
+      50: 'نسبتا موافق',
+      25: 'مخالف',
+      0: 'کاملا مخالف',
+    },
+  },
+  {
+    id: 8,
+    question: ' وزن کودک حین تولد چقدر بوده است',
     type: 'text',
   },
   {
+    id: 9,
+    question: 'ایا کودک چهار دست و پا و سینه خیز رفته است',
+    type: 'text',
+  },
+  {
+    id: 10,
+    question: 'آیا کودک ارتباط چشمی برقرار میکند؟ ',
+    type: 'text',
+  },
+  {
+    id: 11,
+    question: ' آیا رشد جسمی مطابق با نرم است؟',
+    type: 'text',
+  },
+];
+
+const ChildInformationFormOne = [
+  {
+    id: 1,
+    question: 'نام کودک',
+    type: 'text',
+  },
+  {
+    id: 2,
+    question: 'نام خانوادگی کودک',
+    type: 'text',
+  },
+  {
+    id: 3,
+    question: 'روز/ماه/سال تولد کودک',
+    type: 'date',
+  },
+  {
+    id: 4,
+    question: 'تاریخ تولد مادر',
+    type: 'date',
+  },
+  {
+    id: 5,
+    question: 'تحصیلات مادر',
+    type: 'select',
+    items: [
+      'بی سواد',
+      'ابتدایی',
+      'راهنمایی',
+      'دیپلم',
+      'کاردانی',
+      'کارشناسی',
+      'کارشناسی ارشد',
+      'دکتری',
+    ],
+  },
+  {
+    id: 6,
     question: 'شغل مادر',
     type: 'text',
   },
   {
+    id: 7,
     question: 'تاریخ تولد پدر',
     type: 'date',
   },
   {
+    id: 8,
     question: 'تحصیلات پدر',
     type: 'text',
   },
   {
+    id: 9,
     question: 'شغل پدر',
     type: 'text',
   },
   {
+    id: 10,
     question: 'چند فرزند دارید؟',
-    type: 'text',
+    type: 'number',
+    // options: [],
+    condition: [
+      {
+        id: 1,
+        question: 'فاصله ی سنی فرزندان از یک دیگر چقدر است؟',
+        type: 'text',
+        options: [],
+      },
+      {
+        id: 2,
+        question: 'کودک ثبت نام شده فرزند چندم است؟',
+        type: 'text',
+      },
+    ],
   },
+
   {
-    question: 'فاصله ی سنی فرزندان از یک دیگر چقدر است؟',
-    type: 'text',
-    options: [],
-  },
-  {
-    question: 'کودک ثبت نام شده فرزند چندم است؟',
-    type: 'text',
-  },
-  {
+    id: 11,
     question: 'آیا بارداری شما خواسته بوده است؟',
     type: 'radio',
     options: ['بله', 'خیر'],
   },
   {
+    id: 12,
     question: 'آیا پیش آمده فرزند شما شاهد مشاجره و نزاع بوده باشد؟',
     type: 'radio',
     options: ['به ندرت', 'گاهی', 'اغلب'],
   },
   {
+    id: 13,
     question:
       'مشاجراتی که فرزندتان شاهد بوده معمولا لفظی فیزیکی هر دو نوع بوده است.',
     type: 'radio',
     options: ['لفظی', 'فیزیکی', 'هر دو'],
   },
   {
+    id: 14,
     question:
       'مدت زمانی که پدر و مادر با یک دیگر وقت می‌گذرانند برای: تفریح و صمیمیت/مسائل کاری و زندگی روزمره / مسائل تربیتی کودک',
     type: 'text',
   },
   {
+    id: 15,
     question: 'کودک رابطه‌ی عاطفی میان دو والد را می‌بیند؟',
     type: 'radio',
     options: ['گاهی', 'به ندرت', 'اغلب'],
@@ -78,17 +193,20 @@ const ChildInformationFormOne = [
 
 const ChildInformationFormTwo = [
   {
+    id: 1,
     question: 'آیا با کودک به منظور تامین نیاز به توجه ، بازی می کنید ؟',
     type: 'radio',
     options: ['بله', 'خیر'],
     desc: ' توضیح : تامین توجه، یعنی انجام بازی دلخواه کودک که جنبه ی آموزشی نداشته باشد و کودک از آن لذت ببرد.',
   },
   {
+    id: 2,
     question: '   آیا به طور معمول هر روز با کودک بازی می کنید ؟',
     type: 'radio',
     options: ['بله', 'خیر'],
   },
   {
+    id: 3,
     question: 'مدت زمان بازی شما با کودک چند ساعت است ؟',
     type: 'radio',
     options: [
@@ -99,6 +217,7 @@ const ChildInformationFormTwo = [
     desc: '     مقصود زمانی است که به بازی اختصاص می دهید ، مقصود زمان رفت و آمد به کلاس ها و ... نیست .   ',
   },
   {
+    id: 4,
     question: 'آیا کودک از شما دعوت به بازی می کند ؟',
     type: 'radio',
     options: [
@@ -108,6 +227,7 @@ const ChildInformationFormTwo = [
     ],
   },
   {
+    id: 5,
     question: ' وقتی کودک دعوت به بازی می کند پاسخ شما چگونه است ؟',
     type: 'radio',
     options: [
@@ -119,21 +239,25 @@ const ChildInformationFormTwo = [
     ],
   },
   {
+    id: 6,
     question: '  ...فرزندم از بازی با من استقبال ',
     type: 'radio',
     options: ['میکند', 'نمیکند'],
   },
   {
+    id: 7,
     question: ' آیا نوع بازی ای که می کنید دلخواه کودک هست ',
     type: 'radio',
     options: ['بله', 'خیر'],
   },
   {
+    id: 8,
     question: 'در حین بازی با فرزندم موبایلم را چک می کنم',
     type: 'radio',
     options: ['اغلب', 'گاهی', 'به ندرت'],
   },
   {
+    id: 9,
     question: ' با کودکم کم بازی می کنم اما جایگزین دارد',
     type: 'radio',
     options: [
@@ -146,6 +270,7 @@ const ChildInformationFormTwo = [
 
 const ChildInformationFormThree = [
   {
+    id: 1,
     question: 'آیا کودک مراقبینی غیر از پدر و مادر دارد ؟',
     type: 'radio',
     options: ['بله', 'خیر'],
@@ -157,25 +282,32 @@ const ChildInformationFormThree = [
     ],
   },
   {
+    id: 2,
     question:
       '	آیا مراقبان ، هم راستا با روشهای تربیتی و قانون گذاری شما هستند ؟ ',
     type: 'number',
+    title: ['سخت گیر', 'سهل گیر'],
+    desc: '',
   },
   {
+    id: 3,
     question: 'آیا پدر و مادر در روش های تربیتی خود کاملا با هم هم سو هستند ؟',
     type: 'number',
   },
   {
+    id: 4,
     question:
       '	آیا پیش می آید در روش های تربیتی، با همسرتان دچار اختلاف های تکرار شونده باشید ؟',
     type: 'number',
   },
   {
+    id: 5,
     question:
       '	آیا پیش می آید فرزند شما متوجه اختلاف نظر شما ( پدر و مادر ) بشود ؟',
     type: 'number',
   },
   {
+    id: 6,
     question: 'وقتی یکی از والدین کاری را منع می کند :',
     type: 'radio',
     options: [
@@ -185,6 +317,7 @@ const ChildInformationFormThree = [
     ],
   },
   {
+    id: 7,
     question:
       ' آیا پیش می آید قانون یا محرومیتی را بگذارید و آن را اجرایی نکنید',
     type: 'radio',
@@ -197,6 +330,7 @@ const ChildInformationFormThree = [
 ];
 
 export {
+  ChildInformationFormZero,
   ChildInformationFormOne,
   ChildInformationFormTwo,
   ChildInformationFormThree,

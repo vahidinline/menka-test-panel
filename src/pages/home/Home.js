@@ -21,7 +21,7 @@ function Home() {
       localStorage.setItem('questions', JSON.stringify(data));
       if (data && data.length > 0) {
         setTimeout(() => {
-          navigate('/hallway');
+          navigate('/form');
         }, 2000);
       } else {
         // Handle the case when data is not available
@@ -45,7 +45,7 @@ function Home() {
           marginLeft: 0,
         }}>
         <Col>
-          {/* <Card style={{ margin: '30px' }}>
+          <Card style={{ margin: '30px' }}>
             <Card.Body>
               <Card.Title> به منکا خوش امدید</Card.Title>
               <Card.Text>
@@ -69,7 +69,7 @@ function Home() {
               </Button>
               <ProgressBar striped variant="success" />
             </Card.Body>
-          </Card> */}
+          </Card>
         </Col>
         <Col>{/* <CarouselHome /> */}</Col>
       </Row>

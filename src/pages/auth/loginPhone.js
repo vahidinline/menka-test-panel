@@ -41,7 +41,7 @@ function LoginFormPhone() {
           <Form
             onSubmit={(e) => {
               e.preventDefault();
-              window.location.href = '/home';
+              window.location.href = '/hallway';
             }}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>لطفا شماره موبایل خود را وارد کنید</Form.Label>
