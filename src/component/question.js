@@ -33,7 +33,13 @@ const Question = (props) => {
       <Card style={{ width: '100%', height: 'rem' }}>
         <Card.Body>
           <Card.Title>{question.roomType}</Card.Title>
-          <Card.Text>{question.questions.question}</Card.Text>
+          <Card.Title>{question.ageGroup}</Card.Title>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: question.questions.question,
+            }}
+          />
+          {/* <Card.Text>{question.questions.question}</Card.Text> */}
         </Card.Body>
       </Card>
     </Container>

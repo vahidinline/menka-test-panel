@@ -38,6 +38,7 @@ const Q1 = (props) => {
     e.preventDefault();
     // Perform form submission or further processing here
     console.log('Form submitted:', q1Answers);
+    //navigate to registration page
   };
 
   const checkCompletion = () => {

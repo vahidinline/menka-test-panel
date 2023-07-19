@@ -1,15 +1,20 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { Button, Card, ProgressBar } from 'react-bootstrap';
-import CarouselHome from './carousel';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  Button,
+  Card,
+  Container,
+  ProgressBar,
+  Row,
+  Col,
+} from 'react-bootstrap';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import MenkaInput from '../../component/form/input';
 import QuestionsContext from '../../context/questions';
+
 function Home() {
   const { questions, setQuestions } = useContext(QuestionsContext);
   const navigate = useNavigate();
+  const [progress, setProgress] = useState(0);
+  const [data, setData] = useState(false);
 
   const getQuestions = async () => {
     try {
@@ -18,6 +23,7 @@ function Home() {
       );
       const data = await response.json();
       setQuestions(data);
+      setData(true);
       localStorage.setItem('questions', JSON.stringify(data));
       if (data && data.length > 0) {
         setTimeout(() => {
@@ -31,6 +37,18 @@ function Home() {
       console.error('Error fetching questions:', error);
     }
   };
+
+  useEffect(() => {
+    if (data) {
+      const interval = setInterval(() => {
+        setProgress((prevProgress) => prevProgress + 20);
+      }, 400);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [data]);
 
   return (
     <Container>
@@ -47,13 +65,12 @@ function Home() {
         <Col>
           <Card style={{ margin: '30px' }}>
             <Card.Body>
-              <Card.Title> به منکا خوش امدید</Card.Title>
+              <Card.Title>به منکا خوش امدید</Card.Title>
               <Card.Text>
                 منکا معتقد است، هر کودک مانند بوم نقاشی سفیدی است که بخش مهمی از
-                این بوم به دست والدین نقاشی خواهد شد.{' '}
+                این بوم به دست والدین نقاشی خواهد شد.
               </Card.Text>
               <Button
-                //disabled={data === 3 ? false : true}
                 onClick={() => {
                   getQuestions();
                 }}
@@ -61,17 +78,16 @@ function Home() {
                 style={{
                   marginTop: '20px',
                   borderRadius: '20px',
-
                   width: '100%',
                   marginBottom: '20px',
-                }}>
-                تست ASQ{' '}
+                }}
+                disabled={data}>
+                تست ASQ
               </Button>
-              <ProgressBar striped variant="success" />
+              <ProgressBar striped variant="success" now={progress} />
             </Card.Body>
           </Card>
         </Col>
-        <Col>{/* <CarouselHome /> */}</Col>
       </Row>
     </Container>
   );

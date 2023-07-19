@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChildInformationFormZero } from '../../../data/questions.js';
 import PersianDatePicker from '../../persianDatePicker.js';
 import MRangeSlider from '../rangeSlider.js';
@@ -8,20 +8,26 @@ import Alert from 'react-bootstrap/Alert';
 import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.css';
 import { FcNext, FcPrevious } from 'react-icons/fc';
+import './../radio.css';
 const Q0 = (props) => {
   const { setQ0 } = props;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [q0Answers, setQ0Answers] = useState({});
+  console.log(q0Answers);
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
   const formatPc = (p) => p + '%';
   const currentQuestion = ChildInformationFormZero[currentQuestionIndex];
-  console.log(q0Answers);
+  const navigate = useNavigate();
 
-  const handleChange = (e, index) => {
+  const handleChange = (e, index, question) => {
     const updatedFormData = { ...q0Answers };
-    updatedFormData[index] = e.target.value;
+    console.log(updatedFormData);
+    updatedFormData[index] = {
+      question: question,
+      answer: e.target.value,
+    };
     setQ0Answers(updatedFormData);
   };
 
@@ -36,7 +42,6 @@ const Q0 = (props) => {
     //check if input has value
     //if not, return
     const currentAnswer = q0Answers[currentQuestionIndex];
-    console.log(currentAnswer);
     if (currentAnswer) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
@@ -52,19 +57,16 @@ const Q0 = (props) => {
     setQ0(true);
     console.log('set Q1 to true');
     e.preventDefault();
+    localStorage.setItem('q0', JSON.stringify(q0Answers));
     // Perform form submission or further processing here
-    console.log('Form submitted:', q0Answers);
+    //navigate
+    navigate('/register');
   };
 
   const checkCompletion = () => {
     const isCompleted =
       Object.keys(q0Answers).length === ChildInformationFormZero.length;
     setCompleted(isCompleted);
-  };
-
-  //set error to false when user starts typing
-  const handleTyping = () => {
-    setError(false);
   };
 
   //set error to false when user selects a date
@@ -79,22 +81,53 @@ const Q0 = (props) => {
         style={{ marginTop: '2rem' }}>
         <Col xs lg="6">
           <Form.Group controlId={`question${currentQuestionIndex + 1}`}>
-            <Form.Label>{currentQuestion.question}</Form.Label>
+            <div
+              style={{
+                direction: 'rtl',
+                textAlign: 'right',
+                fontSize: '1.2rem',
+                marginBottom: '1rem',
+              }}>
+              {currentQuestion.question}
+            </div>
             {currentQuestion.type === 'text' && (
               <Form.Control
                 required
                 type="text"
-                value={q0Answers[currentQuestionIndex] || ''}
-                onChange={(e) => handleChange(e, currentQuestionIndex)}
+                value={q0Answers[currentQuestionIndex]?.answer || ''}
+                onChange={(e) =>
+                  handleChange(
+                    e,
+                    currentQuestionIndex,
+                    currentQuestion.question
+                  )
+                }
+              />
+            )}
+            {currentQuestion.type === 'number' && (
+              <Form.Control
+                required
+                type="number"
+                value={q0Answers[currentQuestionIndex]?.answer || ''}
+                onChange={(e) =>
+                  handleChange(
+                    e,
+                    currentQuestionIndex,
+                    currentQuestion.question
+                  )
+                }
               />
             )}
             {currentQuestion.type === 'date' && (
               <PersianDatePicker
                 required
-                value={q0Answers[currentQuestionIndex] || ''}
+                value={q0Answers[currentQuestionIndex]?.answer || ''}
                 onChange={(date) => {
                   const updatedFormData = { ...q0Answers };
-                  updatedFormData[currentQuestionIndex] = date;
+                  updatedFormData[currentQuestionIndex] = {
+                    question: currentQuestion.question,
+                    answer: date,
+                  };
                   setQ0Answers(updatedFormData);
                 }}
                 onBlur={() => {}}
@@ -126,7 +159,10 @@ const Q0 = (props) => {
                       onChange={(value) => {
                         setSliderValue(value);
                         const updatedFormData = { ...q0Answers };
-                        updatedFormData[currentQuestionIndex] = value;
+                        updatedFormData[currentQuestionIndex] = {
+                          question: currentQuestion.question,
+                          answer: value,
+                        };
                         setQ0Answers(updatedFormData);
                       }}
                     />
@@ -137,8 +173,14 @@ const Q0 = (props) => {
             {currentQuestion.type === 'select' && (
               <Form.Control
                 as="select"
-                value={q0Answers[currentQuestionIndex] || ''}
-                onChange={(e) => handleChange(e, currentQuestionIndex)}
+                value={q0Answers[currentQuestionIndex]?.answer || ''}
+                onChange={(e) =>
+                  handleChange(
+                    e,
+                    currentQuestionIndex,
+                    currentQuestion.question
+                  )
+                }
                 required>
                 <option value="" disabled hidden>
                   انتخاب کنید
@@ -151,24 +193,36 @@ const Q0 = (props) => {
               </Form.Control>
             )}
             {currentQuestion.type === 'radio' && (
-              <div>
+              <>
                 {currentQuestion.options.map((option, optionIndex) => (
                   <Form.Check
+                    style={{
+                      direction: 'rtl',
+                      textAlign: 'right',
+                      fontSize: '1.2rem',
+                    }}
                     key={optionIndex}
                     type="radio"
                     id={`question${currentQuestionIndex + 1}-option${
                       optionIndex + 1
                     }`}
-                    label={option}
                     value={option}
-                    checked={q0Answers[currentQuestionIndex] === option}
-                    onChange={(e) => handleChange(e, currentQuestionIndex)}
+                    label={option}
+                    checked={q0Answers[currentQuestionIndex]?.answer === option}
+                    onChange={(e) =>
+                      handleChange(
+                        e,
+                        currentQuestionIndex,
+                        currentQuestion.question
+                      )
+                    }
                     required
                   />
                 ))}
-              </div>
+              </>
             )}
           </Form.Group>
+
           <div className="d-flex justify-content-between">
             <Button
               onClick={handlePrevious}

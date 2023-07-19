@@ -63,22 +63,25 @@ const ChildInformationFormZero = [
   {
     id: 8,
     question: ' وزن کودک حین تولد چقدر بوده است',
-    type: 'text',
+    type: 'number',
   },
   {
     id: 9,
     question: 'ایا کودک چهار دست و پا و سینه خیز رفته است',
-    type: 'text',
+    type: 'radio',
+    options: ['بله', 'خیر'],
   },
   {
     id: 10,
     question: 'آیا کودک ارتباط چشمی برقرار میکند؟ ',
-    type: 'text',
+    type: 'radio',
+    options: ['بله', 'خیر'],
   },
   {
     id: 11,
     question: ' آیا رشد جسمی مطابق با نرم است؟',
-    type: 'text',
+    type: 'radio',
+    options: ['بله', 'خیر'],
   },
 ];
 
