@@ -10,6 +10,9 @@ import { useState } from 'react';
 import QuestionsContext from './context/questions';
 import HallWayIndex from './pages/hallWay/hallWayIndex';
 import RoomIndex from './component/room/RoomIndex';
+import ReactGA from 'react-ga';
+const TRACKING_ID = 'UA-99012785-2'; // OUR_TRACKING_ID
+ReactGA.initialize(TRACKING_ID);
 
 function App() {
   const [questions, setQuestions] = useState([]);
