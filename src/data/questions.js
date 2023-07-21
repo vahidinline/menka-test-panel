@@ -9,6 +9,7 @@ const ChildInformationFormZero = [
     question: 'نام خانوادگی کودک',
     type: 'text',
   },
+
   {
     id: 3,
     question: ' تاریخ تولد کودک',
@@ -16,11 +17,16 @@ const ChildInformationFormZero = [
   },
   {
     id: 4,
+    question: '   تعداد هفته تولد زودهنگام کودک',
+    type: 'number',
+  },
+  {
+    id: 5,
     question: 'تاریخ تولد مادر',
     type: 'date',
   },
   {
-    id: 5,
+    id: 6,
     question: 'تحصیلات مادر',
     type: 'select',
     items: [
@@ -35,7 +41,7 @@ const ChildInformationFormZero = [
     ],
   },
   {
-    id: 6,
+    id: 7,
     question: 'آیا کودک مراقبینی غیر از پدر و مادر دارد ؟',
     type: 'radio',
     options: ['بله', 'خیر'],
@@ -48,7 +54,7 @@ const ChildInformationFormZero = [
   },
 
   {
-    id: 7,
+    id: 8,
     question:
       '	آیا مراقبان ، هم راستا با روشهای تربیتی و قانون گذاری شما هستند ؟ ',
     type: 'range',
@@ -61,24 +67,24 @@ const ChildInformationFormZero = [
     },
   },
   {
-    id: 8,
+    id: 9,
     question: ' وزن کودک حین تولد چقدر بوده است',
     type: 'number',
   },
   {
-    id: 9,
+    id: 10,
     question: 'ایا کودک چهار دست و پا و سینه خیز رفته است',
     type: 'radio',
     options: ['بله', 'خیر'],
   },
   {
-    id: 10,
+    id: 11,
     question: 'آیا کودک ارتباط چشمی برقرار میکند؟ ',
     type: 'radio',
     options: ['بله', 'خیر'],
   },
   {
-    id: 11,
+    id: 12,
     question: ' آیا رشد جسمی مطابق با نرم است؟',
     type: 'radio',
     options: ['بله', 'خیر'],
