@@ -108,7 +108,7 @@ function LoginFormPhone() {
               navigate('/hallway');
             }}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>لطفا شماره موبایل خود را وارد کنید</Form.Label>
+              <h4>لطفا شماره موبایل خود را وارد کنید</h4>
               <Form.Control
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 type="phone"
@@ -121,7 +121,19 @@ function LoginFormPhone() {
               <Form.Control type="text" placeholder="Code" />
             </Form.Group> */}
 
-            <Button variant="primary" type="submit">
+            <Button
+              variant="primary"
+              style={{
+                backgroundColor: '#FFC107',
+                border: 'none',
+                width: '100%',
+                color: '#fff',
+                borderRadius: '10px',
+                padding: '10px 20px',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+              }}
+              type="submit">
               دریافت کد
             </Button>
           </Form>

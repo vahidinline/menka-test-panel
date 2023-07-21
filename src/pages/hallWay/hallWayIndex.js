@@ -18,6 +18,7 @@ const HallWayIndex = () => {
   const [ageGroup, setAgeGroup] = useState('');
   const [openDoor, setOpenDoor] = useState(false);
   const [roomName, setRoomName] = useState('');
+  const [parentName, setParentName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +44,19 @@ const HallWayIndex = () => {
     setRoomTypes(uniqueRoomTypes);
   }, [openDoor]);
 
+  useEffect(() => {
+    const result = localStorage.getItem(`${roomName}-answers`);
+    if (result) {
+      setOpenDoor(true);
+    }
+  }, [roomName]);
+
+  useEffect(() => {
+    const result = JSON.parse(localStorage.getItem('q0'));
+    const parent = result[1].answer;
+    setParentName(parent);
+  }, []);
+
   const handleEnterRoom = ({ room, questions }) => {
     setRoomName(room);
     console.log(room);
@@ -57,7 +71,23 @@ const HallWayIndex = () => {
     <Container className="font-face-gm">
       <Row>
         <Col>
-          <h1></h1>
+          <Card
+            style={{
+              width: '100%',
+              height: 'rem',
+              marginTop: '10px',
+              borderColor: '#f8f9fa',
+              borderRadius: '5px',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+            }}>
+            <Card.Body>
+              <Card.Title>سلام {parentName}</Card.Title>
+              <Card.Title>به منکا خوش امدید</Card.Title>
+              <Card.Text>
+                لطفا از طریق اتاق های زیر وارد تست مورد نظر خود شوید
+              </Card.Text>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
       <Row>
@@ -75,10 +105,10 @@ const HallWayIndex = () => {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  height: '100px',
+
                   backgroundColor: '#f8f9fa',
                 }}>
-                <h3>{room}</h3>
+                <h6>سوالان مربوط به بخش {room}</h6>
               </Card.Header>
               <Card.Body
                 onClick={() =>

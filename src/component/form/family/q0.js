@@ -76,16 +76,54 @@ const Q0 = (props) => {
 
   return (
     <Container>
+      <Row>
+        <div className="d-flex justify-content-between">
+          <Button
+            onClick={handlePrevious}
+            style={{ textDecoration: 'none' }}
+            className="btn btn-light text-primary
+               mt-3 mb-3"
+            size="lg"
+            disabled={currentQuestionIndex === 0}>
+            <FcNext size={20} color="white" /> قبلی
+          </Button>
+
+          {currentQuestionIndex < ChildInformationFormZero.length - 1 ? (
+            <Button
+              onClick={handleNext}
+              style={{ textDecoration: 'none' }}
+              className="btn btn-light text-primary
+                mt-3 mb-3"
+              size="lg"
+              // disabled={!q1Answers[currentQuestionIndex]}
+            >
+              بعدی
+              <FcPrevious size={20} color="white" />
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              onClick={handleSubmit}
+              style={{ textDecoration: 'none' }}
+              className="btn btn-primary mt-3 mb-3"
+              size="lg"
+              // disabled={!q1Answers[currentQuestionIndex]}
+            >
+              ثبت فرم و ادامه
+            </Button>
+          )}
+        </div>
+      </Row>
       <Row
         className="justify-content-md-center font-face-gm"
-        style={{ marginTop: '2rem' }}>
-        <Col xs lg="6">
+        style={{ marginTop: '5rem' }}>
+        <Col xs lg="10">
           <Form.Group controlId={`question${currentQuestionIndex + 1}`}>
             <div
               style={{
                 direction: 'rtl',
                 textAlign: 'right',
-                fontSize: '1.2rem',
+                fontSize: '1rem',
                 marginBottom: '1rem',
               }}>
               {currentQuestion.question}
@@ -223,48 +261,13 @@ const Q0 = (props) => {
             )}
           </Form.Group>
 
-          <div className="d-flex justify-content-between">
-            <Button
-              onClick={handlePrevious}
-              style={{ textDecoration: 'none' }}
-              className="btn btn-light text-primary
-               mt-3 mb-3"
-              size="lg"
-              disabled={currentQuestionIndex === 0}>
-              <FcNext size={20} color="white" /> قبلی
-            </Button>
-            {error && (
-              <Alert
-                className="text-right font-face-gm text-right mt-3 mb-3"
-                variant="danger">
-                لطفا به سوال پاسخ دهید
-              </Alert>
-            )}
-            {currentQuestionIndex < ChildInformationFormZero.length - 1 ? (
-              <Button
-                onClick={handleNext}
-                style={{ textDecoration: 'none' }}
-                className="btn btn-light text-primary
-                mt-3 mb-3"
-                size="lg"
-                // disabled={!q1Answers[currentQuestionIndex]}
-              >
-                بعدی
-                <FcPrevious size={20} color="white" />
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                style={{ textDecoration: 'none' }}
-                className="btn btn-primary mt-3 mb-3"
-                size="lg"
-                // disabled={!q1Answers[currentQuestionIndex]}
-              >
-                ثبت فرم و ادامه
-              </Button>
-            )}
-          </div>
+          {error && (
+            <Alert
+              className="text-right font-face-gm text-right mt-3 mb-3"
+              variant="danger">
+              لطفا به سوال پاسخ دهید
+            </Alert>
+          )}
         </Col>
       </Row>
     </Container>

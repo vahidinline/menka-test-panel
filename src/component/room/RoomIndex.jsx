@@ -76,11 +76,12 @@ const RoomIndex = () => {
 
   // Room submission handler
   const handleSubmit = () => {
+    localStorage.setItem(`${room}-answers`, JSON.stringify(selectedAnswers));
     // Perform any final actions before closing the room
 
     // Clear the saved data when all questions are answered
-    localStorage.removeItem(`${room}-answers`);
-    localStorage.removeItem(`${room}-timestamp`);
+    // localStorage.removeItem(`${room}-answers`);
+    // localStorage.removeItem(`${room}-timestamp`);
   };
 
   return (

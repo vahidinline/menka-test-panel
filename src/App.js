@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import './index.css';
 import 'bootstrap/dist/css/bootstrap.rtl.min.css';
 import Home from './pages/home/Home';
 import ChildInformationForm from './component/form/form';

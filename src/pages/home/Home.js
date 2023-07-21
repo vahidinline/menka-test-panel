@@ -56,14 +56,14 @@ function Home() {
         className="font-face-gm"
         style={{
           marginTop: '30px',
-          border: '1px solid #ddd',
-          borderRadius: 40,
+          // border: '1px solid #ddd',
+          // borderRadius: 40,
           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
           overflow: 'hidden',
           marginLeft: 0,
         }}>
         <Col>
-          <Card style={{ margin: '30px' }}>
+          <Card style={{ margin: '30px', border: 'none' }}>
             <Card.Body>
               <Card.Title>به منکا خوش امدید</Card.Title>
               <Card.Text>
@@ -77,14 +77,16 @@ function Home() {
                 variant="primary"
                 style={{
                   marginTop: '20px',
-                  borderRadius: '20px',
+                  // borderRadius: '20px',
                   width: '100%',
                   marginBottom: '20px',
                 }}
                 disabled={data}>
                 تست ASQ
               </Button>
-              <ProgressBar striped variant="success" now={progress} />
+              {progress !== 0 && (
+                <ProgressBar striped variant="success" now={progress} />
+              )}
             </Card.Body>
           </Card>
         </Col>
