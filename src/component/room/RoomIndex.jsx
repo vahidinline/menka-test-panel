@@ -14,20 +14,19 @@ const labels = [
 
 const RoomIndex = () => {
   const location = useLocation();
-  const { questions, room, ageGroup } = location.state;
-  console.log(questions);
+  const { questions, room, ageGroup } = location?.state;
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   useEffect(() => {
-    const filteredQuestions = questions.filter(
+    const filteredQuestions = questions?.filter(
       (question) => question.ageGroup === ageGroup.title
     );
+    if (!filteredQuestions) return;
     setFilteredQuestions(filteredQuestions);
   }, []);
 
-  console.log(filteredQuestions);
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState(
-    Array(filteredQuestions.length).fill('')
+    Array(filteredQuestions?.length).fill('')
   );
   const [savedData, setSavedData] = useState(null); // Saved form data state
 
