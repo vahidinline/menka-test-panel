@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import QuestionsContext from '../../context/questions';
 import RoomIndex from '../../component/room/RoomIndex';
-import { Card, Col, Container } from 'react-bootstrap';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Lottie from 'react-lottie';
-import Door from '../../assets/door.json';
 import { FaLock } from 'react-icons/fa';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import { useNavigate } from 'react-router-dom';
+import Door from './door';
 
 const HallWayIndex = () => {
   //get item form local dtorage
@@ -15,7 +16,10 @@ const HallWayIndex = () => {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [roomTypes, setRoomTypes] = useState([]);
   const [ageGroup, setAgeGroup] = useState('');
-  console.log(ageGroup);
+  const [openDoor, setOpenDoor] = useState(false);
+  const [roomName, setRoomName] = useState('');
+  const navigate = useNavigate();
+
   useEffect(() => {
     setAgeGroup(JSON.parse(localStorage.getItem('ageGroup')));
   }, []);
@@ -37,44 +41,67 @@ const HallWayIndex = () => {
 
     setFilteredQuestions(filteredQuestionsByRoom);
     setRoomTypes(uniqueRoomTypes);
-  }, []);
+  }, [openDoor]);
 
-  const defaultOptions = {
-    loop: false,
-    autoplay: false,
-    animationData: Door,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
+  const handleEnterRoom = ({ room, questions }) => {
+    setRoomName(room);
+    console.log(room);
+    //setOpendoor true if room is equal to roomType
+    setOpenDoor(room === roomName);
+    navigate(`/hallway/room/${room}`, {
+      state: { questions: questions, room: room, ageGroup: ageGroup },
+    });
   };
 
   return (
-    <Container>
-      <Col
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}>
-        {ageGroup?.title}
-        {/* map all roomType and navigate to them */}
-        {roomTypes?.map((room, index) => (
-          <Card style={{ margin: '30px', width: '25rem' }}>
-            <Card.Body>
-              <FaLock className="lock-icon" />
-              <Link
-                state={{
-                  room: room,
-                  questions: filteredQuestions[index],
-                }}
-                to={`/hallway/room/${room}}`}>
-                <Lottie options={defaultOptions} height={400} width={400} />
-              </Link>
-            </Card.Body>
-          </Card>
-        ))}
-      </Col>
+    <Container className="font-face-gm">
+      <Row>
+        <Col>
+          <h1></h1>
+        </Col>
+      </Row>
+      <Row>
+        <Col
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}>
+          {/* map all roomType and navigate to them */}
+          {roomTypes?.map((room, index) => (
+            <Card style={{ margin: '30px', width: '20rem', border: 'none' }}>
+              <Card.Header
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100px',
+                  backgroundColor: '#f8f9fa',
+                }}>
+                <h3>{room}</h3>
+              </Card.Header>
+              <Card.Body
+                onClick={() =>
+                  handleEnterRoom({
+                    room: room,
+                    questions: filteredQuestions[index],
+                    ageGroup: ageGroup,
+                  })
+                }>
+                <Link
+                  state={{
+                    room: room,
+                    questions: filteredQuestions[index],
+                  }}
+                  to={`/hallway/room/${room}}`}>
+                  <Door openDoor={true} />
+                </Link>
+                {/* <FaLock className="lock-icon" /> */}
+              </Card.Body>
+            </Card>
+          ))}
+        </Col>
+      </Row>
     </Container>
   );
 };

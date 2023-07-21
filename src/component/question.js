@@ -1,10 +1,16 @@
 import { Card, Container } from 'react-bootstrap';
 import MenkaInput from './form/input';
 import { useEffect, useState } from 'react';
+import AgeGroups from '../data/ageGroup';
 
 const Question = (props) => {
   const { question } = props;
+  console.log(question);
   const qId = question._id;
+  // const filteredQuestions = question.filter(
+  //   (item) => item.ageGroup === AgeGroups.title
+  // );
+  console.log(question);
   const [answers, setAnswers] = useState({}); // Form data state
   const [savedData, setSavedData] = useState(null); // Saved form data state
 

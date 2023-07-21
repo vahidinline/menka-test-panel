@@ -26,7 +26,6 @@ function LoginFormPhone() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [age, setAge] = useState(0);
   const appVerifier = window.recaptchaVerifier;
-  console.log(appVerifier);
 
   signInWithPhoneNumber(auth, phoneNumber, appVerifier)
     .then((confirmationResult) => {
@@ -82,14 +81,20 @@ function LoginFormPhone() {
         .split('.')
         .map(Number);
 
-      const startAgeInDays = startMonth * 30.44 + startDay;
-      const endAgeInDays = endMonth * 30.44 + endDay;
-
+      const startAgeInDays = startMonth * 30.44;
+      console.log('startAgeInDays', startAgeInDays);
+      const endAgeInDays = endMonth * 30.44;
+      console.log('endAgeInDays', endAgeInDays);
       return ageInDays >= startAgeInDays && ageInDays <= endAgeInDays;
     });
 
-    console.log(matchingAgeGroup);
-    localStorage.setItem('ageGroup', JSON.stringify(matchingAgeGroup));
+    console.log('matchingAgeGroup', matchingAgeGroup);
+    localStorage.setItem(
+      'ageGroup',
+      JSON.stringify(
+        matchingAgeGroup === undefined ? 'زیر یک ماه' : matchingAgeGroup
+      )
+    );
   }
 
   return (

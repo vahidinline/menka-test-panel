@@ -14,10 +14,20 @@ const labels = [
 
 const RoomIndex = () => {
   const location = useLocation();
-  const { questions, room } = location.state;
+  const { questions, room, ageGroup } = location.state;
+  console.log(questions);
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
+  useEffect(() => {
+    const filteredQuestions = questions.filter(
+      (question) => question.ageGroup === ageGroup.title
+    );
+    setFilteredQuestions(filteredQuestions);
+  }, []);
+
+  console.log(filteredQuestions);
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState(
-    Array(questions.length).fill('')
+    Array(filteredQuestions.length).fill('')
   );
   const [savedData, setSavedData] = useState(null); // Saved form data state
 
@@ -76,10 +86,13 @@ const RoomIndex = () => {
   return (
     <div className="mt-5 font-face-gm mx-auto text-justify w-50 bg-white p-5 rounded-3 shadow-lg border border-2 border-secondary">
       {/* Your video and text descriptions for the room can be added here */}
-
-      {questions.length > 0 && (
+      سن کودک : {ageGroup.title}
+      {filteredQuestions.length > 0 && (
         <div>
-          <Question question={questions[currentStep]} />
+          <Question
+            question={filteredQuestions[currentStep]}
+            ageGroup={ageGroup}
+          />
           {labels.map((item, index) => {
             return (
               <Container className="d-flex mt-4" key={item.id}>
@@ -98,7 +111,6 @@ const RoomIndex = () => {
           })}
         </div>
       )}
-
       <div style={{ display: 'flex', justifyContent: 'space-around' }}>
         <button
           className="btn btn-primary"
@@ -107,7 +119,7 @@ const RoomIndex = () => {
           قبلی
         </button>
 
-        {currentStep < questions.length - 1 ? (
+        {currentStep < filteredQuestions.length - 1 ? (
           <button className="btn btn-primary" onClick={handleNextStep}>
             بعدی
           </button>
@@ -117,11 +129,10 @@ const RoomIndex = () => {
           </button>
         )}
       </div>
-
       <ProgressBar
         className="mx-4 my-5"
         animated
-        now={(currentStep / questions.length) * 100}
+        now={(currentStep / filteredQuestions.length) * 100}
       />
     </div>
   );
