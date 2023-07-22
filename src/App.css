@@ -16,6 +16,9 @@
 .font-face-gm {
   font-family: 'iransansweb';
 }
+.font-bold {
+  font-family: 'IRANSans_Bold';
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

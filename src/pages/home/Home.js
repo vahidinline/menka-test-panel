@@ -6,6 +6,7 @@ import {
   ProgressBar,
   Row,
   Col,
+  Image,
 } from 'react-bootstrap';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import QuestionsContext from '../../context/questions';
@@ -51,44 +52,65 @@ function Home() {
   }, [data]);
 
   return (
-    <Container>
+    <Container
+      fluid
+      style={{
+        background: '#FEF4EC',
+      }}>
       <Row
         className="font-face-gm"
         style={{
-          marginTop: '30px',
           // border: '1px solid #ddd',
           // borderRadius: 40,
-          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+
           overflow: 'hidden',
           marginLeft: 0,
         }}>
         <Col>
-          <Card style={{ margin: '30px', border: 'none' }}>
+          <Card
+            style={{
+              marginTop: '230px',
+              border: 'none',
+              background: '#FEF4EC',
+            }}>
             <Card.Body>
-              <Card.Title>به منکا خوش امدید</Card.Title>
-              <Card.Text>
-                منکا معتقد است، هر کودک مانند بوم نقاشی سفیدی است که بخش مهمی از
-                این بوم به دست والدین نقاشی خواهد شد.
-              </Card.Text>
+              <h1 className="font-bold text-center">به منکا خوش امدید</h1>
+              <p className="text-center">
+                در این قسمت متن دلخواه شما نوشته خواهد شد.
+              </p>
               <Button
                 onClick={() => {
                   getQuestions();
                 }}
-                variant="primary"
+                variant="dark"
                 style={{
-                  marginTop: '20px',
-                  // borderRadius: '20px',
-                  width: '100%',
+                  marginTop: '100px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                  textAlign: 'center',
+                  margin: 'auto',
+                  backgroundColor: '#2d3e50',
+                  borderRadius: '40px',
+                  width: '40%',
+                  height: '50px',
                   marginBottom: '20px',
                 }}
                 disabled={data}>
-                تست ASQ
+                شروع تست
               </Button>
+              <p className="text-center mt-5">تست تایید شده توسط ...</p>
               {progress !== 0 && (
                 <ProgressBar striped variant="success" now={progress} />
               )}
             </Card.Body>
           </Card>
+        </Col>
+        <Col>
+          <Image
+            src="https://images.everydayhealth.com/images/lung-respiratory/ear-nose-throat/pg-odd-nose-facts-01-full.jpg?w=768"
+            style={{ width: '100%', height: '100%' }}
+          />
         </Col>
       </Row>
     </Container>

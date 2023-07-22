@@ -12,7 +12,7 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider dir="rtl">
       <BrowserRouter>
-        <Navbars />
+        {/* <Navbars /> */}
 
         <App />
       </BrowserRouter>

@@ -16,6 +16,11 @@ body {
   src: url('./fonts/IRANSansWeb.ttf');
   font-weight: bold;
 }
+@font-face {
+  font-family: 'IRANSans_Bold';
+  src: url('./fonts/IRANSans_Bold.ttf');
+  font-weight: bold;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

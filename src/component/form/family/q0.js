@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChildInformationFormZero } from '../../../data/questions.js';
@@ -9,18 +9,23 @@ import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.css';
 import { FcNext, FcPrevious } from 'react-icons/fc';
 import './../radio.css';
+import JalaliToGregorianConverter from '../../datePickerCustom.js';
 const Q0 = (props) => {
   const { setQ0 } = props;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [q0Answers, setQ0Answers] = useState({});
-  console.log(q0Answers);
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
   const formatPc = (p) => p + '%';
   const currentQuestion = ChildInformationFormZero[currentQuestionIndex];
   const navigate = useNavigate();
-
+  const datePickerRef = useRef(null);
+  const [convertedDate, setConvertedDate] = useState('');
+  console.log(convertedDate);
+  const handleDateConversion = (gregorianDate) => {
+    setConvertedDate(gregorianDate);
+  };
   const handleChange = (e, index, question) => {
     const updatedFormData = { ...q0Answers };
     console.log(updatedFormData);
@@ -30,6 +35,18 @@ const Q0 = (props) => {
     };
     setQ0Answers(updatedFormData);
   };
+
+  //add convertedDate to q0Answers
+  useEffect(() => {
+    if (convertedDate) {
+      const updatedFormData = { ...q0Answers };
+      updatedFormData[currentQuestionIndex] = {
+        question: currentQuestion.question,
+        answer: convertedDate,
+      };
+      setQ0Answers(updatedFormData);
+    }
+  }, [convertedDate]);
 
   const handleDateChange = (date, index) => {
     console.log(date);
@@ -73,6 +90,30 @@ const Q0 = (props) => {
   useEffect(() => {
     setError(false);
   }, [q0Answers]);
+
+  const handleKeyPress = (event) => {
+    // Check if the key pressed is Enter (key code 13)
+    if (event.key === 'Enter') {
+      // Perform the action you want when Enter is pressed (e.g., submit form)
+      handleNext();
+    }
+    if (event.key === 'Backspace' || event.key === 'esc') {
+      // Perform the action you want when Enter is pressed (e.g., submit form)
+      handlePrevious();
+    }
+  };
+
+  const handleDatePickerKeyDown = (event) => {
+    const keyCode = event.keyCode || event.which;
+    console.log(keyCode);
+    // Check if the key pressed is Enter (key code 13)
+    if (keyCode === 13) {
+      datePickerRef.current.open();
+      // Perform the action you want when Enter is pressed (e.g., save the selected date)
+      handleNext();
+      console.log('You pressed Enter!');
+    }
+  };
 
   return (
     <Container>
@@ -132,6 +173,7 @@ const Q0 = (props) => {
               <Form.Control
                 required
                 type="text"
+                onKeyPress={handleKeyPress}
                 value={q0Answers[currentQuestionIndex]?.answer || ''}
                 onChange={(e) =>
                   handleChange(
@@ -145,6 +187,7 @@ const Q0 = (props) => {
             {currentQuestion.type === 'number' && (
               <Form.Control
                 required
+                onKeyPress={handleKeyPress}
                 type="number"
                 value={q0Answers[currentQuestionIndex]?.answer || ''}
                 onChange={(e) =>
@@ -157,19 +200,33 @@ const Q0 = (props) => {
               />
             )}
             {currentQuestion.type === 'date' && (
-              <PersianDatePicker
-                required
-                value={q0Answers[currentQuestionIndex]?.answer || ''}
-                onChange={(date) => {
-                  const updatedFormData = { ...q0Answers };
-                  updatedFormData[currentQuestionIndex] = {
-                    question: currentQuestion.question,
-                    answer: date,
-                  };
-                  setQ0Answers(updatedFormData);
-                }}
-                onBlur={() => {}}
+              <JalaliToGregorianConverter
+                onConversion={handleDateConversion}
+                onKeyPress={handleNext}
               />
+
+              // <>
+              //   <PersianDatePicker
+              //     onKeyPress={() => {
+              //       console.log('keyDown');
+              //     }}
+              //     onClickOutside={() => {
+              //       console.log('clicked outside');
+              //     }}
+              //     ref={datePickerRef}
+              //     value={q0Answers[currentQuestionIndex]?.answer || ''}
+              //     onChange={(date) => {
+              //       const updatedFormData = { ...q0Answers };
+              //       updatedFormData[currentQuestionIndex] = {
+              //         question: currentQuestion.question,
+              //         answer: date,
+              //       };
+              //       setQ0Answers(updatedFormData);
+              //     }}
+              //     onBlur={() => {}}
+              //   />
+              //   <button onKeyDown={console.log('keyDown')} />
+              // </>
             )}
             {currentQuestion.type === 'range' && (
               <Form.Group as={Row}>
@@ -194,6 +251,7 @@ const Q0 = (props) => {
                       value={sliderValue}
                       labels={currentQuestion.options}
                       format={formatPc}
+                      onKeyPress={handleKeyPress}
                       onChange={(value) => {
                         setSliderValue(value);
                         const updatedFormData = { ...q0Answers };

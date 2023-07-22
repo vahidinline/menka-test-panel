@@ -24,11 +24,16 @@ const ChildInformationForm = () => {
   };
 
   return (
-    <Container>
+    <Container
+      fluid
+      style={{
+        backgroundColor: '#FEF4EC',
+        height: '100vh',
+      }}>
       <Row
         className="justify-content-md-center font-face-gm "
-        style={{ marginTop: '2rem', flexDirection: 'row' }}>
-        <Col lg="5" sm="12" md="12" xs={{ order: 2 }}>
+        style={{ flexDirection: 'row' }}>
+        {/* <Col lg="5" sm="12" md="12" xs={{ order: 2 }}>
           <Card style={{ margin: '5px', border: 'none' }}>
             <Card.Body>
               <Card.Text className="text-justify">
@@ -46,7 +51,7 @@ const ChildInformationForm = () => {
               </Card.Text>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
         <Col
           lg="7"
           sm="12"
