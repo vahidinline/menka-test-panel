@@ -1,15 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChildInformationFormZero } from '../../../data/questions.js';
+import { ChildInformationForm } from '../../../data/questions.js';
 import PersianDatePicker from '../../persianDatePicker.js';
 import MRangeSlider from '../rangeSlider.js';
 import Alert from 'react-bootstrap/Alert';
 import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.css';
-import { FcNext, FcPrevious } from 'react-icons/fc';
+import { FcNext, FcPrevious, FcAdvance } from 'react-icons/fc';
+import { MdArrowForward } from 'react-icons/md';
+import { IoMdArrowBack } from 'react-icons/io';
+
 import './../radio.css';
 import JalaliToGregorianConverter from '../../datePickerCustom.js';
+import ProgressBar from '../../Progressbar.js';
+import WeightInput from '../../WeightInput';
+
 const Q0 = (props) => {
   const { setQ0 } = props;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -17,8 +23,9 @@ const Q0 = (props) => {
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
+  const [weight, setWeight] = useState({ kilos: 0, grams: 0 });
   const formatPc = (p) => p + '%';
-  const currentQuestion = ChildInformationFormZero[currentQuestionIndex];
+  const currentQuestion = ChildInformationForm[currentQuestionIndex];
   const navigate = useNavigate();
   const datePickerRef = useRef(null);
   const [convertedDate, setConvertedDate] = useState('');
@@ -82,7 +89,7 @@ const Q0 = (props) => {
 
   const checkCompletion = () => {
     const isCompleted =
-      Object.keys(q0Answers).length === ChildInformationFormZero.length;
+      Object.keys(q0Answers).length === ChildInformationForm.length;
     setCompleted(isCompleted);
   };
 
@@ -116,44 +123,48 @@ const Q0 = (props) => {
   };
 
   return (
-    <Container>
-      <Row>
-        <div className="d-flex justify-content-between">
+    <Container fluid>
+      <Row className="d-flex justify-content-between">
+        <Col className="d-flex justify-content-start align-self-start">
+          {' '}
           <Button
             onClick={handlePrevious}
             style={{ textDecoration: 'none' }}
-            className="btn btn-light text-primary
-               mt-3 mb-3"
+            className="text-dark"
             size="lg"
+            variant="link"
             disabled={currentQuestionIndex === 0}>
-            <FcNext size={20} color="white" /> قبلی
+            <MdArrowForward />
+            قبلی
           </Button>
+        </Col>
 
-          {currentQuestionIndex < ChildInformationFormZero.length - 1 ? (
+        <Col className="d-flex justify-content-end">
+          {currentQuestionIndex < ChildInformationForm.length - 1 ? (
             <Button
               onClick={handleNext}
               style={{ textDecoration: 'none' }}
-              className="btn btn-light text-primary
-                mt-3 mb-3"
+              className="text-dark"
               size="lg"
+              variant="link"
               // disabled={!q1Answers[currentQuestionIndex]}
             >
               بعدی
-              <FcPrevious size={20} color="white" />
+              <IoMdArrowBack />
             </Button>
           ) : (
             <Button
               type="submit"
               onClick={handleSubmit}
               style={{ textDecoration: 'none' }}
-              className="btn btn-primary mt-3 mb-3"
+              className="text-dark"
               size="lg"
               // disabled={!q1Answers[currentQuestionIndex]}
             >
               ثبت فرم و ادامه
             </Button>
           )}
-        </div>
+        </Col>
       </Row>
       <Row
         className="justify-content-md-center font-face-gm"
@@ -161,16 +172,23 @@ const Q0 = (props) => {
         <Col xs lg="10">
           <Form.Group controlId={`question${currentQuestionIndex + 1}`}>
             <div
+              className="font-bold"
               style={{
                 direction: 'rtl',
-                textAlign: 'right',
-                fontSize: '1rem',
+                textAlign: 'center',
+                fontWeight: 'bold',
                 marginBottom: '1rem',
               }}>
               {currentQuestion.question}
             </div>
             {currentQuestion.type === 'text' && (
               <Form.Control
+                style={{
+                  border: '2px solid #000',
+                  padding: '1.5rem',
+                  boxShadow: 'none',
+                  fontSize: '2rem',
+                }}
                 required
                 type="text"
                 onKeyPress={handleKeyPress}
@@ -182,10 +200,48 @@ const Q0 = (props) => {
                     currentQuestion.question
                   )
                 }
+                // Add the following CSS for hover effect
+                onMouseOver={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #f00 with the desired hover border color
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #000 with the original border color
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #00f with the desired focus border color
+                  e.target.style.boxShadow = 'gray'; // Add a custom focus box shadow or set 'none' to remove it
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #000 with the original border color
+                  e.target.style.boxShadow = 'none'; // Add this line to remove the box shadow on blur
+                }}
               />
             )}
             {currentQuestion.type === 'number' && (
               <Form.Control
+                style={{
+                  direction: 'rtl',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  marginBottom: '1rem',
+                  height: '5rem',
+
+                  fontSize: '2rem',
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #f00 with the desired hover border color
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #000 with the original border color
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #00f with the desired focus border color
+                  e.target.style.boxShadow = 'gray'; // Add a custom focus box shadow or set 'none' to remove it
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #000 with the original border color
+                  e.target.style.boxShadow = 'none'; // Add this line to remove the box shadow on blur
+                }}
                 required
                 onKeyPress={handleKeyPress}
                 type="number"
@@ -202,6 +258,7 @@ const Q0 = (props) => {
             {currentQuestion.type === 'date' && (
               <JalaliToGregorianConverter
                 onConversion={handleDateConversion}
+                type={currentQuestion.id}
                 onKeyPress={handleNext}
               />
 
@@ -268,6 +325,27 @@ const Q0 = (props) => {
             )}
             {currentQuestion.type === 'select' && (
               <Form.Control
+                style={{
+                  direction: 'rtl',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  marginBottom: '1rem',
+                  height: '5rem',
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #f00 with the desired hover border color
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #000 with the original border color
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #00f with the desired focus border color
+                  e.target.style.boxShadow = 'gray'; // Add a custom focus box shadow or set 'none' to remove it
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#000'; // Replace #000 with the original border color
+                  e.target.style.boxShadow = 'none'; // Add this line to remove the box shadow on blur
+                }}
                 as="select"
                 value={q0Answers[currentQuestionIndex]?.answer || ''}
                 onChange={(e) =>
@@ -288,6 +366,20 @@ const Q0 = (props) => {
                 ))}
               </Form.Control>
             )}
+            {currentQuestion.type === 'weight' && (
+              <WeightInput
+                onChange={(value) => {
+                  setWeight(value);
+                  const updatedFormData = { ...q0Answers };
+                  updatedFormData[currentQuestionIndex] = {
+                    question: currentQuestion.question,
+                    answer: value,
+                  };
+                  setQ0Answers(updatedFormData);
+                }}
+              />
+            )}
+
             {currentQuestion.type === 'radio' && (
               <>
                 {currentQuestion.options.map((option, optionIndex) => (
@@ -328,6 +420,8 @@ const Q0 = (props) => {
           )}
         </Col>
       </Row>
+
+      {/* <ProgressBar totalSteps={ChildInformationForm.length}  /> */}
     </Container>
   );
 };

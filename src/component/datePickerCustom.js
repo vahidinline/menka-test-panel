@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import jalaliMoment from 'jalali-moment';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
-const JalaliToGregorianConverter = ({ onConversion }) => {
+const JalaliToGregorianConverter = ({ onConversion, type }) => {
+  console.log(type);
   // Calculate the starting Jalali year for the range (60 years ago from the current Jalali year)
   const currentJalaliYear = jalaliMoment().jYear();
-  const startingJalaliYear = currentJalaliYear - 60;
+  const startingJalaliYear =
+    type === 3 ? currentJalaliYear - 5 : currentJalaliYear - 60;
 
   const [jalaliDate, setJalaliDate] = useState({
     year: '',
@@ -69,6 +71,12 @@ const JalaliToGregorianConverter = ({ onConversion }) => {
         <Col lg="4" md="12" sm="12">
           <Form.Group controlId="year">
             <Form.Control
+              style={{
+                direction: 'rtl',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                marginBottom: '1rem',
+              }}
               as="select"
               name="year"
               value={jalaliDate.year}

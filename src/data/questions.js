@@ -1,13 +1,13 @@
 const ChildInformationFormZero = [
   {
     id: 1,
-    question: 'نام کودک',
+    question: 'نام و نام خانوادگی کودک',
     type: 'text',
   },
   {
     id: 2,
-    question: 'نام خانوادگی کودک',
-    type: 'text',
+    question: 'وزن کودک در هنگام تولد',
+    type: 'weight',
   },
 
   {
@@ -30,14 +30,13 @@ const ChildInformationFormZero = [
     question: 'تحصیلات مادر',
     type: 'select',
     items: [
-      'بی سواد',
-      'ابتدایی',
-      'راهنمایی',
+      'کمتر از دیپلم',
       'دیپلم',
       'کاردانی',
       'کارشناسی',
       'کارشناسی ارشد',
       'دکتری',
+      'فوق دکتری',
     ],
   },
   {
@@ -91,16 +90,21 @@ const ChildInformationFormZero = [
   },
 ];
 
-const ChildInformationFormOne = [
+const ChildInformationForm = [
   {
     id: 1,
-    question: 'نام کودک',
+    question: 'نام و نام خانوادگی کودک',
     type: 'text',
   },
+  // {
+  //   id: 2,
+  //   question: 'نام خانوادگی کودک',
+  //   type: 'text',
+  // },
   {
     id: 2,
-    question: 'نام خانوادگی کودک',
-    type: 'text',
+    question: 'وزن کودک در هنگام تولد',
+    type: 'weight',
   },
   {
     id: 3,
@@ -117,14 +121,13 @@ const ChildInformationFormOne = [
     question: 'تحصیلات مادر',
     type: 'select',
     items: [
-      'بی سواد',
-      'ابتدایی',
-      'راهنمایی',
+      'کمتر از دیپلم',
       'دیپلم',
       'کاردانی',
       'کارشناسی',
       'کارشناسی ارشد',
       'دکتری',
+      'فوق دکتری',
     ],
   },
   {
@@ -140,7 +143,16 @@ const ChildInformationFormOne = [
   {
     id: 8,
     question: 'تحصیلات پدر',
-    type: 'text',
+    type: 'select',
+    items: [
+      'کمتر از دیپلم',
+      'دیپلم',
+      'کاردانی',
+      'کارشناسی',
+      'کارشناسی ارشد',
+      'دکتری',
+      'فوق دکتری',
+    ],
   },
   {
     id: 9,
@@ -198,24 +210,22 @@ const ChildInformationFormOne = [
     type: 'radio',
     options: ['گاهی', 'به ندرت', 'اغلب'],
   },
-];
 
-const ChildInformationFormTwo = [
   {
-    id: 1,
+    id: 16,
     question: 'آیا با کودک به منظور تامین نیاز به توجه ، بازی می کنید ؟',
     type: 'radio',
     options: ['بله', 'خیر'],
     desc: ' توضیح : تامین توجه، یعنی انجام بازی دلخواه کودک که جنبه ی آموزشی نداشته باشد و کودک از آن لذت ببرد.',
   },
   {
-    id: 2,
+    id: 17,
     question: '   آیا به طور معمول هر روز با کودک بازی می کنید ؟',
     type: 'radio',
     options: ['بله', 'خیر'],
   },
   {
-    id: 3,
+    id: 18,
     question: 'مدت زمان بازی شما با کودک چند ساعت است ؟',
     type: 'radio',
     options: [
@@ -226,7 +236,7 @@ const ChildInformationFormTwo = [
     desc: '     مقصود زمانی است که به بازی اختصاص می دهید ، مقصود زمان رفت و آمد به کلاس ها و ... نیست .   ',
   },
   {
-    id: 4,
+    id: 19,
     question: 'آیا کودک از شما دعوت به بازی می کند ؟',
     type: 'radio',
     options: [
@@ -236,7 +246,7 @@ const ChildInformationFormTwo = [
     ],
   },
   {
-    id: 5,
+    id: 20,
     question: ' وقتی کودک دعوت به بازی می کند پاسخ شما چگونه است ؟',
     type: 'radio',
     options: [
@@ -248,25 +258,25 @@ const ChildInformationFormTwo = [
     ],
   },
   {
-    id: 6,
+    id: 21,
     question: '  ...فرزندم از بازی با من استقبال ',
     type: 'radio',
     options: ['میکند', 'نمیکند'],
   },
   {
-    id: 7,
+    id: 22,
     question: ' آیا نوع بازی ای که می کنید دلخواه کودک هست ',
     type: 'radio',
     options: ['بله', 'خیر'],
   },
   {
-    id: 8,
+    id: 23,
     question: 'در حین بازی با فرزندم موبایلم را چک می کنم',
     type: 'radio',
     options: ['اغلب', 'گاهی', 'به ندرت'],
   },
   {
-    id: 9,
+    id: 24,
     question: ' با کودکم کم بازی می کنم اما جایگزین دارد',
     type: 'radio',
     options: [
@@ -275,11 +285,9 @@ const ChildInformationFormTwo = [
       'خودش سرگرم میشود.',
     ],
   },
-];
 
-const ChildInformationFormThree = [
   {
-    id: 1,
+    id: 25,
     question: 'آیا کودک مراقبینی غیر از پدر و مادر دارد ؟',
     type: 'radio',
     options: ['بله', 'خیر'],
@@ -291,32 +299,40 @@ const ChildInformationFormThree = [
     ],
   },
   {
-    id: 2,
+    id: 26,
     question:
       '	آیا مراقبان ، هم راستا با روشهای تربیتی و قانون گذاری شما هستند ؟ ',
-    type: 'number',
-    title: ['سخت گیر', 'سهل گیر'],
-    desc: '',
+    type: 'range',
+    options: {
+      100: 'کاملا موافق',
+      75: 'موافق',
+      50: 'نسبتا موافق',
+      25: 'مخالف',
+      0: 'کاملا مخالف',
+    },
   },
   {
-    id: 3,
+    id: 27,
     question: 'آیا پدر و مادر در روش های تربیتی خود کاملا با هم هم سو هستند ؟',
-    type: 'number',
+    type: 'radio',
+    options: ['بله', 'خیر'],
   },
   {
-    id: 4,
+    id: 28,
     question:
       '	آیا پیش می آید در روش های تربیتی، با همسرتان دچار اختلاف های تکرار شونده باشید ؟',
-    type: 'number',
+    type: 'radio',
+    options: ['بله', 'خیر'],
   },
   {
-    id: 5,
+    id: 29,
     question:
       '	آیا پیش می آید فرزند شما متوجه اختلاف نظر شما ( پدر و مادر ) بشود ؟',
-    type: 'number',
+    type: 'radio',
+    options: ['بله', 'خیر'],
   },
   {
-    id: 6,
+    id: 30,
     question: 'وقتی یکی از والدین کاری را منع می کند :',
     type: 'radio',
     options: [
@@ -326,7 +342,7 @@ const ChildInformationFormThree = [
     ],
   },
   {
-    id: 7,
+    id: 31,
     question:
       ' آیا پیش می آید قانون یا محرومیتی را بگذارید و آن را اجرایی نکنید',
     type: 'radio',
@@ -338,9 +354,4 @@ const ChildInformationFormThree = [
   },
 ];
 
-export {
-  ChildInformationFormZero,
-  ChildInformationFormOne,
-  ChildInformationFormTwo,
-  ChildInformationFormThree,
-};
+export { ChildInformationFormZero, ChildInformationForm };

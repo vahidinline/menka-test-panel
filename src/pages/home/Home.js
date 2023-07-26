@@ -1,15 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  Button,
-  Card,
-  Container,
-  ProgressBar,
-  Row,
-  Col,
-  Image,
-} from 'react-bootstrap';
+import { Button, Card, Container, Row, Col, Image } from 'react-bootstrap';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import QuestionsContext from '../../context/questions';
+import ProgressBar from '../../component/Progressbar';
 
 function Home() {
   const { questions, setQuestions } = useContext(QuestionsContext);
@@ -101,7 +94,16 @@ function Home() {
               </Button>
               <p className="text-center mt-5">تست تایید شده توسط ...</p>
               {progress !== 0 && (
-                <ProgressBar striped variant="success" now={progress} />
+                <ProgressBar
+                  now={progress}
+                  label={`${progress}%`}
+                  style={{
+                    width: '40%',
+                    margin: 'auto',
+                    marginTop: '20px',
+                    marginBottom: '20px',
+                  }}
+                />
               )}
             </Card.Body>
           </Card>
