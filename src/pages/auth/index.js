@@ -6,8 +6,12 @@ import { useState } from 'react';
 const AuthIndex = () => {
   const [loginType, setLoginType] = useState('email');
   return (
-    <Container className="font-face-gm">
-      <Row></Row>
+    <Container
+      fluid
+      className="font-face-gm"
+      style={{
+        background: '#FEF4EC',
+      }}>
       <Row>
         <Col>
           <LoginFormPhone />

@@ -1,0 +1,19 @@
+.otp-group {
+  display: flex;
+  width: 100%;
+  max-width: 360px;
+  column-gap: 10px;
+  direction: rtl;
+}
+
+.otp-input {
+  direction: ltr;
+  width: 25%;
+  height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1;
+}

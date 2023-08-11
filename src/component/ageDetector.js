@@ -5,7 +5,7 @@ function calculateAgeInYearsMonthsDays(familyBaseQuestions) {
   }
 
   // Convert the date string to a Date object with the correct format "YYYY/MM/DD"
-  const [year, month, day] = birthdayDateStr.split('/').map(Number);
+  const [year, month, day] = birthdayDateStr.split('-').map(Number);
   const birthdayDate = new Date(year, month - 1, day);
 
   if (isNaN(birthdayDate)) {

@@ -8,7 +8,7 @@ import {
   Row,
 } from 'react-bootstrap';
 
-const WeightInput = ({ onChange }) => {
+const WeightInput = ({ onChange, keyPress }) => {
   const [weight, setWeight] = useState({ kilos: 0, grams: 0 });
 
   const handleChange = (event) => {
@@ -20,13 +20,22 @@ const WeightInput = ({ onChange }) => {
     onChange({ ...weight, [name]: value });
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      const { kilos, grams } = weight;
+      if (kilos !== 0 && grams !== 0) {
+        // Trigger your function here
+
+        keyPress(event);
+      }
+    }
+  };
+
   const getTotalWeight = () => {
     const totalKilos = parseInt(weight.kilos, 10);
     const totalGrams = parseInt(weight.grams, 10);
     return `${totalKilos} کیلو و ${totalGrams} گرم`;
   };
-
-  // Pass the total weight to the parent component
 
   return (
     <Container>
@@ -40,22 +49,18 @@ const WeightInput = ({ onChange }) => {
           }}>
           <FormControl
             className="font-bold"
-            style={{
-              border: '2px solid #000',
-              borderWidth: '2px 2px 2px 0',
-              padding: '1.5rem',
-              boxShadow: 'none',
-              fontSize: '2rem',
-              paddingRight: '0',
-              borderRadius: '0 10px 10px 0 ',
-              textAlign: 'center',
-            }}
+            style={
+              {
+                // ...styles for input
+              }
+            }
             type="number"
             min={100}
             max={999}
             name="grams"
             value={weight.grams}
             onChange={handleChange}
+            onKeyDown={handleKeyDown} // Add this line
             placeholder="وزن به گرم"
             aria-label="Grams"
           />
@@ -69,21 +74,16 @@ const WeightInput = ({ onChange }) => {
           }}>
           <FormControl
             className="font-bold"
-            style={{
-              border: '2px solid #000',
-              borderWidth: '2px 0 2px 2px',
-              padding: '1.5rem',
-              paddingRight: '0',
-              borderRadius: '10px 0 0 10px ',
-              boxShadow: 'none',
-              fontSize: '2rem',
-
-              textAlign: 'center',
-            }}
+            style={
+              {
+                // ...styles for input
+              }
+            }
             type="number"
             name="kilos"
             value={weight.kilos}
             onChange={handleChange}
+            onKeyDown={handleKeyDown} // Add this line
             placeholder="وزن به کیلو"
             aria-label="Kilos"
           />
@@ -91,11 +91,11 @@ const WeightInput = ({ onChange }) => {
       </Row>
       <Row>
         <Col>
-          <p
-            className="font-bold text-center shadow-sm p-3 mb-5 bg-transparent rounded
-          ">
-            {getTotalWeight()}
-          </p>
+          {weight.kilos && weight.grams ? (
+            <p className="font-bold text-center shadow-sm p-3 mb-5 bg-transparent rounded">
+              {getTotalWeight()}
+            </p>
+          ) : null}
         </Col>
       </Row>
     </Container>

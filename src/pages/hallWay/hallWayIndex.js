@@ -9,12 +9,25 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useNavigate } from 'react-router-dom';
 import Door from './door';
+import { useJwt } from 'react-jwt';
 
 const HallWayIndex = () => {
   //get item form local dtorage
   const questions = JSON.parse(localStorage.getItem('questions'));
   const [filteredQuestions, setFilteredQuestions] = useState([]);
-  const [roomTypes, setRoomTypes] = useState([]);
+  const [token, setToken] = useState(null);
+
+  const { decodedToken, isExpired } = useJwt(token);
+  console.log('decodedToken', decodedToken);
+  const [roomTypes, setRoomTypes] = useState([
+    // { name: 'ارتباطات', open: false, done: false },
+    // { name: 'حرکات درشت', open: false, done: false },
+    // { name: 'حرکات ظریف', open: false, done: false },
+    // { name: 'حل مساله', open: false, done: false },
+    // { name: 'مهارت های شخصی و اجتماعی ', open: false, done: false },
+    // { name: 'سوالات کلی', open: false, done: false },
+  ]);
+  console.log('roomTypes', roomTypes);
   const [ageGroup, setAgeGroup] = useState('');
   const [openDoor, setOpenDoor] = useState(false);
   const [roomName, setRoomName] = useState('');
@@ -23,6 +36,9 @@ const HallWayIndex = () => {
 
   useEffect(() => {
     setAgeGroup(JSON.parse(localStorage.getItem('ageGroup')));
+  }, []);
+  useEffect(() => {
+    setToken(localStorage.getItem('token'));
   }, []);
 
   useEffect(() => {
@@ -42,7 +58,7 @@ const HallWayIndex = () => {
 
     setFilteredQuestions(filteredQuestionsByRoom);
     setRoomTypes(uniqueRoomTypes);
-  }, [openDoor]);
+  }, []);
 
   useEffect(() => {
     const result = localStorage.getItem(`${roomName}-answers`);
@@ -53,7 +69,7 @@ const HallWayIndex = () => {
 
   useEffect(() => {
     const result = JSON.parse(localStorage.getItem('q0'));
-    const parent = result[1].answer;
+    const parent = result[0].answer;
     setParentName(parent);
   }, []);
 
@@ -63,7 +79,13 @@ const HallWayIndex = () => {
     //setOpendoor true if room is equal to roomType
     setOpenDoor(room === roomName);
     navigate(`/hallway/room/${room}`, {
-      state: { questions: questions, room: room, ageGroup: ageGroup },
+      state: {
+        questions: questions,
+        room: room,
+        ageGroup: ageGroup,
+        done: room.done,
+        userId: decodedToken?.id,
+      },
     });
   };
 
@@ -81,7 +103,7 @@ const HallWayIndex = () => {
               boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
             }}>
             <Card.Body>
-              <Card.Title>سلام {parentName}</Card.Title>
+              <Card.Title>پدر/مادر {parentName}</Card.Title>
               <Card.Title>به منکا خوش امدید</Card.Title>
               <Card.Text>
                 لطفا از طریق اتاق های زیر وارد تست مورد نظر خود شوید
@@ -99,7 +121,9 @@ const HallWayIndex = () => {
           }}>
           {/* map all roomType and navigate to them */}
           {roomTypes?.map((room, index) => (
-            <Card style={{ margin: '30px', width: '20rem', border: 'none' }}>
+            <Card
+              key={index}
+              style={{ margin: '30px', width: '20rem', border: 'none' }}>
               <Card.Header
                 style={{
                   display: 'flex',
@@ -108,7 +132,7 @@ const HallWayIndex = () => {
 
                   backgroundColor: '#f8f9fa',
                 }}>
-                <h6>سوالان مربوط به بخش {room}</h6>
+                <h6>سوالات مربوط به بخش {room}</h6>
               </Card.Header>
               <Card.Body
                 onClick={() =>
@@ -120,7 +144,9 @@ const HallWayIndex = () => {
                 }>
                 <Link
                   state={{
-                    room: room,
+                    room: room.name,
+                    done: room.done,
+                    userId: decodedToken,
                     questions: filteredQuestions[index],
                   }}
                   to={`/hallway/room/${room}}`}>

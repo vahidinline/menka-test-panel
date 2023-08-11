@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import jalaliMoment from 'jalali-moment';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
-const JalaliToGregorianConverter = ({ onConversion, type }) => {
-  console.log(type);
+const JalaliToGregorianConverter = ({ onConversion, type, keyPress }) => {
   // Calculate the starting Jalali year for the range (60 years ago from the current Jalali year)
   const currentJalaliYear = jalaliMoment().jYear();
   const startingJalaliYear =
@@ -61,6 +60,15 @@ const JalaliToGregorianConverter = ({ onConversion, type }) => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && gregorianDate) {
+      // Trigger your function here
+
+      keyPress(event);
+      console.log('Enter pressed');
+    }
+  };
+
   useEffect(() => {
     checkData();
   }, [jalaliDate]);
@@ -76,8 +84,11 @@ const JalaliToGregorianConverter = ({ onConversion, type }) => {
                 textAlign: 'center',
                 fontWeight: 'bold',
                 marginBottom: '1rem',
+                fontSize: '2rem',
+                border: '2px solid #000',
               }}
               as="select"
+              onKeyDown={handleKeyDown}
               name="year"
               value={jalaliDate.year}
               onChange={handleChange}>
@@ -89,7 +100,16 @@ const JalaliToGregorianConverter = ({ onConversion, type }) => {
         <Col lg="4" md="12" sm="12">
           <Form.Group controlId="month">
             <Form.Control
+              style={{
+                direction: 'rtl',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                marginBottom: '1rem',
+                fontSize: '2rem',
+                border: '2px solid #000',
+              }}
               as="select"
+              onKeyDown={handleKeyDown}
               name="month"
               value={jalaliDate.month}
               onChange={handleChange}>
@@ -101,7 +121,16 @@ const JalaliToGregorianConverter = ({ onConversion, type }) => {
         <Col lg="4" md="12" sm="12">
           <Form.Group controlId="day">
             <Form.Control
+              style={{
+                direction: 'rtl',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                marginBottom: '1rem',
+                fontSize: '2rem',
+                border: '2px solid #000',
+              }}
               as="select"
+              onKeyDown={handleKeyDown}
               name="day"
               value={jalaliDate.day}
               onChange={handleChange}>

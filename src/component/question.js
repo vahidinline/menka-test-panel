@@ -5,12 +5,12 @@ import AgeGroups from '../data/ageGroup';
 
 const Question = (props) => {
   const { question } = props;
-  console.log(question);
-  const qId = question._id;
+
+  const qId = question?._id;
   // const filteredQuestions = question.filter(
   //   (item) => item.ageGroup === AgeGroups.title
   // );
-  console.log(question);
+
   const [answers, setAnswers] = useState({}); // Form data state
   const [savedData, setSavedData] = useState(null); // Saved form data state
 
@@ -38,13 +38,16 @@ const Question = (props) => {
     <Container className="font-face-gm">
       <Card style={{ width: '100%', height: 'rem' }}>
         <Card.Body>
-          <Card.Title>{question.roomType}</Card.Title>
-          <Card.Title>{question.ageGroup}</Card.Title>
+          <Card.Title>{question?.roomType}</Card.Title>
+          <Card.Title>{question?.ageGroup}</Card.Title>
           <div
+            className="font-face-gm"
             dangerouslySetInnerHTML={{
-              __html: question.questions.question,
+              __html: question?.questions.question,
             }}
           />
+          {/* <div> {question?.questions.question}</div> */}
+
           {/* <Card.Text>{question.questions.question}</Card.Text> */}
         </Card.Body>
       </Card>

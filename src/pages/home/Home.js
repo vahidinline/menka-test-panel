@@ -1,8 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Card, Container, Row, Col, Image } from 'react-bootstrap';
+import {
+  Button,
+  Card,
+  Container,
+  Row,
+  Col,
+  Image,
+  ProgressBar,
+  Placeholder,
+} from 'react-bootstrap';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import QuestionsContext from '../../context/questions';
-import ProgressBar from '../../component/Progressbar';
 
 function Home() {
   const { questions, setQuestions } = useContext(QuestionsContext);
@@ -11,6 +19,7 @@ function Home() {
   const [data, setData] = useState(false);
 
   const getQuestions = async () => {
+    localStorage.clear();
     try {
       const response = await fetch(
         'https://menkabackend.herokuapp.com/question/getall'
@@ -21,7 +30,7 @@ function Home() {
       localStorage.setItem('questions', JSON.stringify(data));
       if (data && data.length > 0) {
         setTimeout(() => {
-          navigate('/form');
+          navigate('/register');
         }, 2000);
       } else {
         // Handle the case when data is not available
@@ -49,6 +58,7 @@ function Home() {
       fluid
       style={{
         background: '#FEF4EC',
+        height: '100vh',
       }}>
       <Row
         className="font-face-gm"
@@ -59,7 +69,7 @@ function Home() {
           overflow: 'hidden',
           marginLeft: 0,
         }}>
-        <Col>
+        <Col xs={12} sm={12} md={6}>
           <Card
             style={{
               marginTop: '230px',
@@ -104,15 +114,27 @@ function Home() {
                     marginBottom: '20px',
                   }}
                 />
+                // <ProgressBar
+                //   now={progress}
+                //   label={`${progress}%`}
+                //   style={{
+                //     width: '40%',
+                //     margin: 'auto',
+                //     marginTop: '20px',
+                //     marginBottom: '20px',
+                //   }}
+                // />
               )}
             </Card.Body>
           </Card>
         </Col>
-        <Col>
-          <Image
+        <Col xs={12} sm={12} md={6}>
+          <Placeholder animation="glow" />
+          <Placeholder xs={12} bg="primary" animation="glow" />
+          {/* <Image
             src="https://images.everydayhealth.com/images/lung-respiratory/ear-nose-throat/pg-odd-nose-facts-01-full.jpg?w=768"
             style={{ width: '100%', height: '100%' }}
-          />
+          /> */}
         </Col>
       </Row>
     </Container>

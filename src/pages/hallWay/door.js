@@ -4,7 +4,7 @@ import Doors from '../../assets/door.json';
 
 const Door = (props) => {
   const { openDoor } = props;
-  console.log(openDoor);
+
   const defaultOptions = {
     loop: false,
     autoplay: openDoor,

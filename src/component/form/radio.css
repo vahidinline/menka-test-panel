@@ -36,7 +36,6 @@ label {
   position: relative;
   display: grid;
   grid-gap: 20px;
-  width: 320px;
   height: 62px;
   padding: 0 20px;
   border-radius: 6px;

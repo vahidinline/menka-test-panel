@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Question from '../question';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import MenkaInput from '../form/input';
 import { Container, Form } from 'react-bootstrap';
-import RoomNameFrame from './frame';
+import axios from 'axios';
 
 const labels = [
   { id: 0, label: 'بله' },
@@ -13,8 +13,10 @@ const labels = [
 ];
 
 const RoomIndex = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { questions, room, ageGroup } = location?.state;
+  const { questions, room, ageGroup, done, userId } = location?.state;
+  console.log('userId', userId);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   useEffect(() => {
     const filteredQuestions = questions?.filter(
@@ -28,6 +30,7 @@ const RoomIndex = () => {
   const [selectedAnswers, setSelectedAnswers] = useState(
     Array(filteredQuestions?.length).fill('')
   );
+  console.log('selectedAnswers', selectedAnswers);
   const [savedData, setSavedData] = useState(null); // Saved form data state
 
   // Load saved data from storage on component mount
@@ -48,16 +51,17 @@ const RoomIndex = () => {
   }, []);
 
   // Update form data and selected answer
-  const handleChange = (event, index) => {
+  const handleChange = (event, index, question) => {
     const { value } = event.target;
+
     setSelectedAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
-      newAnswers[index] = value;
+      newAnswers[index] = { question, a: value };
       return newAnswers;
     });
     setSelectedAnswers((prevSelected) => {
       const newSelected = [...prevSelected];
-      newSelected[index] = value;
+      newSelected[index] = { question, a: value };
       return newSelected;
     });
   };
@@ -76,6 +80,7 @@ const RoomIndex = () => {
   // Room submission handler
   const handleSubmit = () => {
     localStorage.setItem(`${room}-answers`, JSON.stringify(selectedAnswers));
+    handleSubmitCloud();
     // Perform any final actions before closing the room
 
     // Clear the saved data when all questions are answered
@@ -83,10 +88,54 @@ const RoomIndex = () => {
     // localStorage.removeItem(`${room}-timestamp`);
   };
 
+  const handleSubmitCloud = async () => {
+    try {
+      const result = await axios.post(
+        `${process.env.REACT_APP_FIREBASE_AUTH_DOMAIN}/answers/add`,
+        {
+          userId: userId,
+          qa: selectedAnswers,
+          room: room,
+          ageGroup: ageGroup.title,
+        }
+      );
+      navigate('/hallway');
+    } catch (error) {
+      alert('خطایی رخ داده است');
+    }
+  };
+  const handleNext = () => {
+    handleNextStep();
+    //check if input has valu
+    //if not, return
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
+  };
+
+  const handleKeyPress = (event) => {
+    // Check if the key pressed is Enter (key code 13)
+    if (event.key === 'Enter') {
+      // Perform the action you want when Enter is pressed (e.g., submit form)
+      console.log('enter');
+      handleNext();
+    }
+    if (event.key === 'Backspace' || event.key === 'esc') {
+      // Perform the action you want when Enter is pressed (e.g., submit form)
+      handlePrevious();
+    }
+  };
+
   return (
-    <div className="mt-5 font-face-gm mx-auto text-justify w-50 bg-white p-5 rounded-3 shadow-lg border border-2 border-secondary">
+    <Container
+      fluid
+      style={{
+        background: '#FEF4EC',
+        height: '100vh',
+      }}>
       {/* Your video and text descriptions for the room can be added here */}
-      سن کودک : {ageGroup.title}
+      {/* سن کودک : {ageGroup.title} */}
       {filteredQuestions.length > 0 && (
         <div>
           <Question
@@ -95,15 +144,23 @@ const RoomIndex = () => {
           />
           {labels.map((item, index) => {
             return (
-              <Container className="d-flex mt-4" key={item.id}>
+              <Container className="font-face-gm d-flex mt-4" key={item.id}>
                 <Form.Group required className="mb-3">
                   <Form.Check
+                    onKeyDown={handleKeyPress}
                     type="radio"
+                    required
                     name={`answer_${currentStep}`} // Use a unique name for each question
                     label={item.label}
                     value={index.toString()} // Use the index as the value
                     checked={selectedAnswers[currentStep] === index.toString()}
-                    onChange={(e) => handleChange(e, currentStep)} // Pass the current step's index
+                    onChange={(e) =>
+                      handleChange(
+                        e,
+                        currentStep,
+                        filteredQuestions[currentStep]._id
+                      )
+                    } // Pass the current step's index
                   />
                 </Form.Group>
               </Container>
@@ -112,18 +169,17 @@ const RoomIndex = () => {
         </div>
       )}
       <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-        <button
+        {/* <button
           className="btn btn-primary"
           disabled={currentStep === 0}
           onClick={() => setCurrentStep((prevStep) => prevStep - 1)}>
           قبلی
-        </button>
+        </button> */}
 
-        {currentStep < filteredQuestions.length - 1 ? (
-          <button className="btn btn-primary" onClick={handleNextStep}>
-            بعدی
-          </button>
-        ) : (
+        {currentStep < filteredQuestions.length - 1 ? null : (
+          // <button className="btn btn-primary" onClick={handleNextStep}>
+          //   بعدی
+          // </button>
           <button className="btn btn-primary" onClick={handleSubmit}>
             ثبت
           </button>
@@ -134,7 +190,7 @@ const RoomIndex = () => {
         animated
         now={(currentStep / filteredQuestions.length) * 100}
       />
-    </div>
+    </Container>
   );
 };
 

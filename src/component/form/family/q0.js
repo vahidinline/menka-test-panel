@@ -19,7 +19,9 @@ import WeightInput from '../../WeightInput';
 const Q0 = (props) => {
   const { setQ0 } = props;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  console.log('currentQuestionIndex', currentQuestionIndex);
   const [q0Answers, setQ0Answers] = useState({});
+  console.log('q0Answers', q0Answers);
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
@@ -29,13 +31,11 @@ const Q0 = (props) => {
   const navigate = useNavigate();
   const datePickerRef = useRef(null);
   const [convertedDate, setConvertedDate] = useState('');
-  console.log(convertedDate);
   const handleDateConversion = (gregorianDate) => {
     setConvertedDate(gregorianDate);
   };
   const handleChange = (e, index, question) => {
     const updatedFormData = { ...q0Answers };
-    console.log(updatedFormData);
     updatedFormData[index] = {
       question: question,
       answer: e.target.value,
@@ -63,13 +63,18 @@ const Q0 = (props) => {
   };
 
   const handleNext = () => {
-    //check if input has value
+    //check if input has valu
+
     //if not, return
     const currentAnswer = q0Answers[currentQuestionIndex];
-    if (currentAnswer) {
+    console.log(currentQuestionIndex);
+    console.log(currentAnswer);
+    if (currentAnswer && currentAnswer.question !== 'روز/ماه/سال تولد کودک') {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
+      handleSubmit();
       setError(true);
+      console.log('error', currentAnswer);
     }
   };
 
@@ -79,12 +84,13 @@ const Q0 = (props) => {
 
   const handleSubmit = (e) => {
     setQ0(true);
-    console.log('set Q1 to true');
-    e.preventDefault();
+
+    //e.preventDefault();
+    console.log(q0Answers);
     localStorage.setItem('q0', JSON.stringify(q0Answers));
     // Perform form submission or further processing here
     //navigate
-    navigate('/register');
+    navigate('/getage');
   };
 
   const checkCompletion = () => {
@@ -125,21 +131,7 @@ const Q0 = (props) => {
   return (
     <Container fluid>
       <Row className="d-flex justify-content-between">
-        <Col className="d-flex justify-content-start align-self-start">
-          {' '}
-          <Button
-            onClick={handlePrevious}
-            style={{ textDecoration: 'none' }}
-            className="text-dark"
-            size="lg"
-            variant="link"
-            disabled={currentQuestionIndex === 0}>
-            <MdArrowForward />
-            قبلی
-          </Button>
-        </Col>
-
-        <Col className="d-flex justify-content-end">
+        {/* <Col className="d-flex justify-content-start">
           {currentQuestionIndex < ChildInformationForm.length - 1 ? (
             <Button
               onClick={handleNext}
@@ -149,26 +141,41 @@ const Q0 = (props) => {
               variant="link"
               // disabled={!q1Answers[currentQuestionIndex]}
             >
+              <MdArrowForward />
               بعدی
-              <IoMdArrowBack />
             </Button>
           ) : (
-            <Button
-              type="submit"
-              onClick={handleSubmit}
-              style={{ textDecoration: 'none' }}
-              className="text-dark"
-              size="lg"
-              // disabled={!q1Answers[currentQuestionIndex]}
-            >
-              ثبت فرم و ادامه
-            </Button>
+            <Col className="d-flex justify-content-end">
+              <Button
+                onClick={handleSubmit}
+                style={{ textDecoration: 'none' }}
+                className="text-dark"
+                size="lg"
+                variant="link"
+                // disabled={!q1Answers[currentQuestionIndex]}
+              >
+                ثبت فرم و ادامه
+              </Button>
+            </Col>
           )}
+        </Col> */}
+        <Col className="d-flex justify-content-end align-self-end">
+          {' '}
+          <Button
+            onClick={handlePrevious}
+            style={{ textDecoration: 'none' }}
+            className="text-dark"
+            size="lg"
+            variant="link"
+            disabled={currentQuestionIndex === 0}>
+            قبلی
+            <IoMdArrowBack />
+          </Button>
         </Col>
       </Row>
       <Row
         className="justify-content-md-center font-face-gm"
-        style={{ marginTop: '5rem' }}>
+        style={{ marginTop: '5rem', height: '100vh' }}>
         <Col xs lg="10">
           <Form.Group controlId={`question${currentQuestionIndex + 1}`}>
             <div
@@ -259,7 +266,7 @@ const Q0 = (props) => {
               <JalaliToGregorianConverter
                 onConversion={handleDateConversion}
                 type={currentQuestion.id}
-                onKeyPress={handleNext}
+                keyPress={handleNext}
               />
 
               // <>
@@ -296,6 +303,7 @@ const Q0 = (props) => {
                       direction: 'ltr',
                     }}>
                     <Slider
+                      onChangeComplete={handleNext}
                       style={{
                         width: '100%',
                         height: '36px',
@@ -325,12 +333,15 @@ const Q0 = (props) => {
             )}
             {currentQuestion.type === 'select' && (
               <Form.Control
+                onKeyDown={handleKeyPress}
                 style={{
                   direction: 'rtl',
                   textAlign: 'center',
                   fontWeight: 'bold',
                   marginBottom: '1rem',
                   height: '5rem',
+                  fontSize: '2rem',
+                  border: '2px solid #000',
                 }}
                 onMouseOver={(e) => {
                   e.target.style.borderColor = '#000'; // Replace #f00 with the desired hover border color
@@ -368,6 +379,7 @@ const Q0 = (props) => {
             )}
             {currentQuestion.type === 'weight' && (
               <WeightInput
+                keyPress={handleKeyPress}
                 onChange={(value) => {
                   setWeight(value);
                   const updatedFormData = { ...q0Answers };
@@ -388,6 +400,7 @@ const Q0 = (props) => {
                       direction: 'rtl',
                       textAlign: 'right',
                       fontSize: '1.2rem',
+                      width: '100%',
                     }}
                     key={optionIndex}
                     type="radio"
@@ -397,6 +410,7 @@ const Q0 = (props) => {
                     value={option}
                     label={option}
                     checked={q0Answers[currentQuestionIndex]?.answer === option}
+                    onKeyDown={handleKeyPress}
                     onChange={(e) =>
                       handleChange(
                         e,
@@ -420,8 +434,25 @@ const Q0 = (props) => {
           )}
         </Col>
       </Row>
-
       {/* <ProgressBar totalSteps={ChildInformationForm.length}  /> */}
+      <Row>
+        <Col>
+          {q0Answers && (
+            <>
+              <Alert
+                className="text-right font-face-gm text-right mt-3 mb-3"
+                variant="success">
+                {q0Answers[0]?.answer}
+              </Alert>
+              {/* <Alert
+                className="text-right font-face-gm text-right mt-3 mb-3"
+                variant="success">
+                {q0Answers[2]?.answer}
+              </Alert> */}
+            </>
+          )}
+        </Col>
+      </Row>
     </Container>
   );
 };

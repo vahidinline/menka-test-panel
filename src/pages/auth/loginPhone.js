@@ -1,144 +1,90 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import { initializeApp } from 'firebase/app';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import calculateAgeInYearsMonthsDays from '../../component/ageDetector';
-import AgeGroups from '../../data/ageGroup';
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-};
+import Verif from './verif';
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-auth.languageCode = 'en';
 function LoginFormPhone() {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [age, setAge] = useState(0);
-  const appVerifier = window.recaptchaVerifier;
+  const [phoneSent, setPhoneSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-    .then((confirmationResult) => {
-      console.log('sms sent');
-      window.confirmationResult = confirmationResult;
-      // ...
-    })
-    .catch((error) => {
-      // Error; SMS not sent
-      // ...
-    });
   const handleSubmitData = async () => {
+    setIsLoading(true);
     try {
-      const familyBaseQuestions = localStorage.getItem('q0');
-      const familyBaseQuestionsParsed = JSON.parse(familyBaseQuestions);
-      const age = calculateAgeInYearsMonthsDays(familyBaseQuestionsParsed);
-      console.log(age);
-      setAge(age);
-      const matchingAgeGroup = getAgeGroupByAge(age);
-      console.log(matchingAgeGroup);
-      // Modify the familyBaseQuestionsParsed object to include phoneNumber
-      if (familyBaseQuestionsParsed) {
-        familyBaseQuestionsParsed.phoneNumber = phoneNumber;
-      } else {
-        // If the data is not available, create a new object with phoneNumber
-        familyBaseQuestionsParsed = { phoneNumber };
-      }
-
-      // Store the updated data back in localStorage
-      localStorage.setItem('q0', JSON.stringify(familyBaseQuestionsParsed));
-      // const result = await axios.post(
-      //   'http://localhost:8081/api/register',
-      //   familyBaseQuestionsParsed
-      // );
-      // console.log(result);
+      const result = await axios.post(
+        `${process.env.REACT_APP_FIREBASE_AUTH_DOMAIN}/api/login/`,
+        {
+          phoneNumber: phoneNumber,
+        }
+      );
+      setPhoneSent(true);
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
   };
 
-  function getAgeGroupByAge(age) {
-    console.log(age.months);
-    const ageInDays = age.months * 30.44; // Average number of days in a month
-
-    // Find the matching age group based on the given age in days
-    const matchingAgeGroup = AgeGroups.find((ageGroup) => {
-      const [startMonth, startDay] = ageGroup.code
-        .split('-')[0]
-        .split('.')
-        .map(Number);
-      const [endMonth, endDay] = ageGroup.code
-        .split('-')[1]
-        .split('.')
-        .map(Number);
-
-      const startAgeInDays = startMonth * 30.44;
-      console.log('startAgeInDays', startAgeInDays);
-      const endAgeInDays = endMonth * 30.44;
-      console.log('endAgeInDays', endAgeInDays);
-      return ageInDays >= startAgeInDays && ageInDays <= endAgeInDays;
-    });
-
-    console.log('matchingAgeGroup', matchingAgeGroup);
-    localStorage.setItem(
-      'ageGroup',
-      JSON.stringify(
-        matchingAgeGroup === undefined ? 'زیر یک ماه' : matchingAgeGroup
-      )
-    );
-  }
-
   return (
-    <Container fluid="md">
-      <Row className="justify-content-md-center mt-5 font-face-gm">
-        <Col lg="4">
-          <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmitData();
-              navigate('/hallway');
-            }}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <h4>لطفا شماره موبایل خود را وارد کنید</h4>
-              <Form.Control
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                type="phone"
-                placeholder="۰۹۱۲۳۴۵۶۷۸۹"
-              />
-            </Form.Group>
+    <Container style={{ height: '100vh' }}>
+      {phoneSent ? (
+        <Row>
+          <Verif phoneNumber={phoneNumber} />
+        </Row>
+      ) : (
+        <Row className="justify-content-md-center mt-5 font-face-gm">
+          <Col lg="4">
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmitData();
+                // navigate('/hallway');
+              }}>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <h4 className="text-center font-bold">
+                  لطفا شماره موبایل خود را وارد کنید
+                </h4>
+                <Form.Control
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  type="phone"
+                  placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                />
+              </Form.Group>
 
-            {/* <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Code</Form.Label>
-              <Form.Control type="text" placeholder="Code" />
-            </Form.Group> */}
-
-            <Button
-              variant="primary"
-              style={{
-                backgroundColor: '#FFC107',
-                border: 'none',
-                width: '100%',
-                color: '#fff',
-                borderRadius: '10px',
-                padding: '10px 20px',
-                fontSize: '1.2rem',
-                fontWeight: 'bold',
-              }}
-              type="submit">
-              دریافت کد
-            </Button>
-          </Form>
-        </Col>
-      </Row>
+              <Button
+                variant="primary"
+                disabled={isLoading}
+                style={{
+                  border: 'none',
+                  width: '100%',
+                  color: '#fff',
+                  borderRadius: '10px',
+                  padding: '10px 20px',
+                  fontSize: '1.2rem',
+                  fontWeight: 'bold',
+                }}
+                type="submit">
+                {isLoading && (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                    <span className="visually-hidden">Loading...</span>
+                  </>
+                )}
+                ثبت نام
+              </Button>
+            </Form>
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 }

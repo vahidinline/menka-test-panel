@@ -11,6 +11,7 @@ import QuestionsContext from './context/questions';
 import HallWayIndex from './pages/hallWay/hallWayIndex';
 import RoomIndex from './component/room/RoomIndex';
 import ReactGA from 'react-ga';
+import BeforeRoom from './component/beforeRoom';
 const TRACKING_ID = 'UA-99012785-2'; // OUR_TRACKING_ID
 ReactGA.initialize(TRACKING_ID);
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/hallway" element={<HallWayIndex />} />
           <Route path="/hallway/room/:id" element={<RoomIndex />} />
+          <Route path="/getage" element={<BeforeRoom />} />
         </Route>
       </Routes>
     </QuestionsContext.Provider>
