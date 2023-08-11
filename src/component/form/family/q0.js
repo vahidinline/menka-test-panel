@@ -69,7 +69,11 @@ const Q0 = (props) => {
     const currentAnswer = q0Answers[currentQuestionIndex];
     console.log(currentQuestionIndex);
     console.log(currentAnswer);
-    if (currentAnswer && currentAnswer.question !== 'روز/ماه/سال تولد کودک') {
+    if (
+      currentAnswer &&
+      currentAnswer.question !==
+        ' آیا پیش می آید قانون یا محرومیتی را بگذارید و آن را اجرایی نکنید'
+    ) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
       handleSubmit();
