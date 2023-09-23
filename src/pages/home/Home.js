@@ -22,7 +22,7 @@ function Home() {
     localStorage.clear();
     try {
       const response = await fetch(
-        'https://menkabackend.herokuapp.com/question/getall'
+        'https://menka-backend.el.r.appspot.com/question/getall'
       );
       const data = await response.json();
       setQuestions(data);

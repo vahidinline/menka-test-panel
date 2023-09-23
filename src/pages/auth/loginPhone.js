@@ -16,7 +16,7 @@ function LoginFormPhone() {
     setIsLoading(true);
     try {
       const result = await axios.post(
-        `${process.env.REACT_APP_FIREBASE_AUTH_DOMAIN}/api/login/`,
+        `https://menka-backend.el.r.appspot.com/api/login/`,
         {
           phoneNumber: phoneNumber,
         }
